@@ -1,31 +1,36 @@
 {
-  "name": "vite-min-template",
-  "homepage": "https://Eughami.github.io/cinema-dj/",
-  "private": true,
-  "version": "0.0.0",
-  "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
-    "preview": "vite preview",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist"
-  },
-  "dependencies": {
-    "@mantine/core": "7.15.2",
-    "@mantine/hooks": "7.15.2",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1"
-  },
-  "devDependencies": {
-    "@types/react": "^18.3.12",
-    "@types/react-dom": "^18.3.1",
-    "@vitejs/plugin-react": "^4.3.4",
-    "postcss": "^8.4.49",
-    "postcss-preset-mantine": "1.17.0",
-    "postcss-simple-vars": "^7.0.1",
-    "typescript": "^5.7.2",
-    "vite": "^6.0.1"
-  },
-  "packageManager": "yarn@4.5.3"
-}
+      "name": "vite-min-template",
+      "homepage": "https://Eughami.github.io/cinema-dj/",
+      "private": true,
+      "version": "0.0.0",
+      "type": "module",
+      "scripts": {
+        "dev": "vite",
+        "build": "tsc && vite build",
+        "preview": "vite preview",
+        "predeploy": "yarn build",
+        "deploy": "gh-pages -d dist"
+      },
+      "dependencies": {
+        "@mantine/carousel": "^7.15.2",
+        "@mantine/core": "7.15.2",
+        "@mantine/hooks": "7.15.2",
+        "embla-carousel-react": "^7.1.0",
+        "react": "^18.3.1",
+        "react-dom": "^18.3.1"
+      },
+      "devDependencies": {
+        "@types/gh-pages": "^6",
+        "@types/react": "^18.3.12",
+        "@types/react-dom": "^18.3.1",
+        "@vitejs/plugin-react": "^4.3.4",
+        "gh-pages": "^6.2.0",
+        "postcss": "^8.4.49",
+        "postcss-preset-mantine": "1.17.0",
+        "postcss-simple-vars": "^7.0.1",
+        "typescript": "^5.7.2",
+        "vite": "^6.0.1"
+      },
+      "packageManager": "yarn@4.5.3"
+    }
+        
