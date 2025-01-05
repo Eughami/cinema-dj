@@ -3,6 +3,8 @@ import classes from './MovieTime.module.css';
 import { IconTicket } from '@tabler/icons-react';
 
 const MovieTime = () => {
+  const baseRoute = import.meta.env.VITE_BASE_ROUTE;
+
   return (
     <div className={classes.mtRoot}>
       <div className={classes.mtHour}>19:30</div>
@@ -22,7 +24,9 @@ const MovieTime = () => {
         variant="outline"
         color="#620D8A"
       >
-        Buy ticket
+        <a title="Buy ticket" href={`/${baseRoute}/booking/1`}>
+          Buy ticket
+        </a>
       </Button>
     </div>
   );
