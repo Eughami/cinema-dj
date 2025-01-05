@@ -781,6 +781,24 @@
           languageName: node
           linkType: hard
         
+        "@tabler/icons-react@npm:^3.26.0":
+          version: 3.26.0
+          resolution: "@tabler/icons-react@npm:3.26.0"
+          dependencies:
+            "@tabler/icons": "npm:3.26.0"
+          peerDependencies:
+            react: ">= 16"
+          checksum: 10c0/938d5a4614e740bbc55514d49d9069de35cdfc5ceebbfbe454bf4930396a0425a14c7eeeba24e439b0f9c3f2790e1c9c3c68c959267f0be6751685b88fa8b3ec
+          languageName: node
+          linkType: hard
+        
+        "@tabler/icons@npm:3.26.0":
+          version: 3.26.0
+          resolution: "@tabler/icons@npm:3.26.0"
+          checksum: 10c0/60eee2f656f3b391d22f97fd9949913ed3bf19773e6c27b755f62edb67dc3ef2d347efebf486cca012599787326b2dc6ad94d6bf9a765def87e73119b84c32ae
+          languageName: node
+          linkType: hard
+        
         "@types/babel__core@npm:^7.20.5":
           version: 7.20.5
           resolution: "@types/babel__core@npm:7.20.5"
@@ -822,6 +840,13 @@
           languageName: node
           linkType: hard
         
+        "@types/cookie@npm:^0.6.0":
+          version: 0.6.0
+          resolution: "@types/cookie@npm:0.6.0"
+          checksum: 10c0/5b326bd0188120fb32c0be086b141b1481fec9941b76ad537f9110e10d61ee2636beac145463319c71e4be67a17e85b81ca9e13ceb6e3bb63b93d16824d6c149
+          languageName: node
+          linkType: hard
+        
         "@types/estree@npm:1.0.6":
           version: 1.0.6
           resolution: "@types/estree@npm:1.0.6"
@@ -833,6 +858,15 @@
           version: 6.1.0
           resolution: "@types/gh-pages@npm:6.1.0"
           checksum: 10c0/d8bf644822df211accac9cff24fcc0a5155fd715d05bc1698175623f5cde1aff81c302e7e38f7105e0fa0fe7ab24d7009d8dbb875897af669f48e06c3c20484c
+          languageName: node
+          linkType: hard
+        
+        "@types/node@npm:^22.10.5":
+          version: 22.10.5
+          resolution: "@types/node@npm:22.10.5"
+          dependencies:
+            undici-types: "npm:~6.20.0"
+          checksum: 10c0/6a0e7d1fe6a86ef6ee19c3c6af4c15542e61aea2f4cee655b6252efb356795f1f228bc8299921e82924e80ff8eca29b74d9dd0dd5cc1a90983f892f740b480df
           languageName: node
           linkType: hard
         
@@ -1096,6 +1130,13 @@
           languageName: node
           linkType: hard
         
+        "cookie@npm:^1.0.1":
+          version: 1.0.2
+          resolution: "cookie@npm:1.0.2"
+          checksum: 10c0/fd25fe79e8fbcfcaf6aa61cd081c55d144eeeba755206c058682257cb38c4bd6795c6620de3f064c740695bb65b7949ebb1db7a95e4636efb8357a335ad3f54b
+          languageName: node
+          linkType: hard
+        
         "cross-spawn@npm:^7.0.0":
           version: 7.0.3
           resolution: "cross-spawn@npm:7.0.3"
@@ -1169,6 +1210,15 @@
           version: 5.0.0
           resolution: "email-addresses@npm:5.0.0"
           checksum: 10c0/fc8a6f84e378bbe601ce39a3d8d86bc7e4584030ae9eb1938e12943f7fb5207e5fd7ae449cced3bea70968a519ade560d55ca170208c3f1413d7d25d8613a577
+          languageName: node
+          linkType: hard
+        
+        "embla-carousel-autoplay@npm:^7.1.0":
+          version: 7.1.0
+          resolution: "embla-carousel-autoplay@npm:7.1.0"
+          peerDependencies:
+            embla-carousel: 7.1.0
+          checksum: 10c0/27b80fceee448c6e62144d68cd474f62d388feb93f61adcb00e4a12c80595235cd0e865e3dd305eef28591bfc5ffd40181aa8fa29ce6f85bd3331fecada071bc
           languageName: node
           linkType: hard
         
@@ -2115,7 +2165,7 @@
           languageName: node
           linkType: hard
         
-        "postcss-preset-mantine@npm:1.17.0":
+        "postcss-preset-mantine@npm:^1.17.0":
           version: 1.17.0
           resolution: "postcss-preset-mantine@npm:1.17.0"
           dependencies:
@@ -2242,6 +2292,24 @@
             "@types/react":
               optional: true
           checksum: 10c0/c5881c537477d986e8d25d2588a9b6f7fe1254e05946fb4f4b55baeead502b0e1875fc3c42bb6f82736772cd96a50266e41d84e3c4cd25e9525bdfe2d838e96d
+          languageName: node
+          linkType: hard
+        
+        "react-router@npm:^7.1.1":
+          version: 7.1.1
+          resolution: "react-router@npm:7.1.1"
+          dependencies:
+            "@types/cookie": "npm:^0.6.0"
+            cookie: "npm:^1.0.1"
+            set-cookie-parser: "npm:^2.6.0"
+            turbo-stream: "npm:2.4.0"
+          peerDependencies:
+            react: ">=18"
+            react-dom: ">=18"
+          peerDependenciesMeta:
+            react-dom:
+              optional: true
+          checksum: 10c0/39f4859670f286eb2eac29e5830c1f730405701fca0808e5db853ec05e54e55a848c764e10ffd14a7b9b3b2154a0d6449656d7f208b9b3e4b2af780e07bf57a8
           languageName: node
           linkType: hard
         
@@ -2416,6 +2484,13 @@
           bin:
             semver: bin/semver.js
           checksum: 10c0/5160b06975a38b11c1ab55950cb5b8a23db78df88275d3d8a42ccf1f29e55112ac995b3a26a522c36e3b5f76b0445f1eef70d696b8c7862a2b4303d7b0e7609e
+          languageName: node
+          linkType: hard
+        
+        "set-cookie-parser@npm:^2.6.0":
+          version: 2.7.1
+          resolution: "set-cookie-parser@npm:2.7.1"
+          checksum: 10c0/060c198c4c92547ac15988256f445eae523f57f2ceefeccf52d30d75dedf6bff22b9c26f756bd44e8e560d44ff4ab2130b178bd2e52ef5571bf7be3bd7632d9a
           languageName: node
           linkType: hard
         
@@ -2604,6 +2679,13 @@
           languageName: node
           linkType: hard
         
+        "turbo-stream@npm:2.4.0":
+          version: 2.4.0
+          resolution: "turbo-stream@npm:2.4.0"
+          checksum: 10c0/e68b2569f1f16e6e9633d090c6024b2ae9f0e97bfeacb572451ca3732e120ebbb546f3bc4afc717c46cb57b5aea6104e04ef497f9912eef6a7641e809518e98a
+          languageName: node
+          linkType: hard
+        
         "type-fest@npm:^4.27.0":
           version: 4.28.0
           resolution: "type-fest@npm:4.28.0"
@@ -2628,6 +2710,13 @@
             tsc: bin/tsc
             tsserver: bin/tsserver
           checksum: 10c0/f3b8082c9d1d1629a215245c9087df56cb784f9fb6f27b5d55577a20e68afe2a889c040aacff6d27e35be165ecf9dca66e694c42eb9a50b3b2c451b36b5675cb
+          languageName: node
+          linkType: hard
+        
+        "undici-types@npm:~6.20.0":
+          version: 6.20.0
+          resolution: "undici-types@npm:6.20.0"
+          checksum: 10c0/68e659a98898d6a836a9a59e6adf14a5d799707f5ea629433e025ac90d239f75e408e2e5ff086afc3cace26f8b26ee52155293564593fbb4a2f666af57fc59bf
           languageName: node
           linkType: hard
         
@@ -2750,17 +2839,21 @@
             "@mantine/carousel": "npm:^7.15.2"
             "@mantine/core": "npm:7.15.2"
             "@mantine/hooks": "npm:7.15.2"
+            "@tabler/icons-react": "npm:^3.26.0"
             "@types/gh-pages": "npm:^6"
+            "@types/node": "npm:^22.10.5"
             "@types/react": "npm:^18.3.12"
             "@types/react-dom": "npm:^18.3.1"
             "@vitejs/plugin-react": "npm:^4.3.4"
+            embla-carousel-autoplay: "npm:^7.1.0"
             embla-carousel-react: "npm:^7.1.0"
             gh-pages: "npm:^6.2.0"
             postcss: "npm:^8.4.49"
-            postcss-preset-mantine: "npm:1.17.0"
+            postcss-preset-mantine: "npm:^1.17.0"
             postcss-simple-vars: "npm:^7.0.1"
             react: "npm:^18.3.1"
             react-dom: "npm:^18.3.1"
+            react-router: "npm:^7.1.1"
             typescript: "npm:^5.7.2"
             vite: "npm:^6.0.1"
           languageName: unknown

@@ -1,0 +1,52 @@
+.seatingLayout {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.row {
+  display: flex;
+  gap: 5px;
+}
+
+.seat {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #ccc;
+  cursor: pointer;
+}
+
+.available {
+  background-color: #f0f0f0;
+}
+
+.reserved {
+  background-color: #ff69b4; /* Pink */
+  cursor: not-allowed;
+}
+
+.selected {
+  background-color: #800080; /* Purple */
+}
+
+.legend {
+  display: flex;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.legendColor {
+  width: 20px;
+  height: 20px;
+  border: 1px solid #ccc;
+}

@@ -1,16 +1,25 @@
 import '@mantine/core/styles.css';
+import '@mantine/carousel/styles.css';
 import { MantineProvider } from '@mantine/core';
 import { theme } from './theme';
-import '@mantine/carousel/styles.css';
-import HomeCaroussel from './components/HomeCaroussel';
+import './App.css';
+import { BrowserRouter, Route, Routes } from 'react-router';
+import HomePage from './HomePage';
+import Movie from './Movie';
+import NotFound from './components/NotFound';
+import SeatingLayout from './components/SeatingLayout';
 
 export default function App() {
   return (
     <MantineProvider theme={theme}>
-      <div>
-        <h1>Hello World!</h1>
-        <HomeCaroussel />
-      </div>
+      <BrowserRouter basename="cinema-dj">
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/movie/:id" element={<Movie />} />
+          <Route path="/booking/:id" element={<SeatingLayout />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </BrowserRouter>
     </MantineProvider>
   );
 }

@@ -1,0 +1,76 @@
+.label {
+  color: #8a21bc;
+  font-weight: 700;
+}
+.root {
+  box-shadow: 1px 1px 5px #620d8a66;
+}
+.movieTitle {
+  color: #cb6904;
+  font-weight: 900;
+}
+.movieBadge {
+  position: relative;
+  top: -5px;
+  font-size: 14px;
+  border-radius: 0;
+  margin: 0 0.5em;
+  padding: 0.35em 0.4em 0.25em;
+  box-shadow: 3px 3px #dfca41;
+  background-color: black;
+  color: white;
+}
+
+.dateSelection {
+  background-color: #faf5e3;
+  /* margin-left: -1em; */
+  /* margin-right: -1em; */
+  padding: 1em;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 0;
+}
+.dateLeft {
+  /* width: 50%; */
+  display: flex;
+  align-items: center;
+}
+.calendarIcon {
+  width: 27px;
+  height: 26px;
+  margin-right: 5px;
+}
+.today {
+  color: #620d8a;
+  font-weight: 700;
+}
+
+.dateRight {
+  margin-left: 1em;
+}
+
+.selectRoot {
+  width: 220px;
+}
+.movieRoot {
+  /* background-color: black; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  /* overflow-y: scroll; */
+}
+.gridRoot {
+  /* margin: auto; */
+  max-width: 990px;
+  margin: 0 1em;
+  padding: 1em;
+  background-color: white;
+  border-radius: 1em;
+
+  @media (max-width: $mantine-breakpoint-sm) {
+    border-radius: 0;
+    margin: 0;
+  }
+}

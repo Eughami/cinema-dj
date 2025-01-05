@@ -1,0 +1,38 @@
+.mtRoot {
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  margin: 0.5em 0;
+  padding: 0.5em 0;
+}
+
+.mtButton {
+  border: 3px solid #620d8a;
+  padding: 0.375rem 0.55rem;
+  box-shadow: 1px 1px 5px #620d8a66;
+}
+.mtButtonLabel {
+  font-weight: 700;
+}
+.mtHour {
+  border-radius: 5px;
+  font-size: 1.2em;
+  font-weight: 700;
+  background-color: #620d8a;
+  color: #fff;
+  white-space: nowrap;
+  padding: 0.25em 0.5em;
+}
+.mtHall {
+  margin-left: 0.25em;
+  color: #8a21bc;
+}
+.mtLang {
+  flex-grow: 1;
+  text-align: center;
+  width: auto;
+  span {
+    color: #999;
+    display: block;
+  }
+}

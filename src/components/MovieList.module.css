@@ -1,0 +1,15 @@
+.title {
+  color: #fff;
+  font-size: 1.5em;
+  font-weight: 700;
+  text-align: center;
+  padding: 0.5em;
+  background: linear-gradient(to right, #fff 0%, #b96407 50%, #fff 100%);
+}
+.movieCardContainer {
+  overflow-x: scroll;
+  display: flex;
+  flex-direction: row;
+  gap: 1em;
+  padding: 1em;
+}
