@@ -7,7 +7,7 @@ import { BrowserRouter, Route, Routes } from 'react-router';
 import HomePage from './HomePage';
 import Movie from './Movie';
 import NotFound from './components/NotFound';
-import SeatingLayout from './components/SeatingLayout';
+import { TheaterSeating } from './components/TheaterSeating/TheaterSeating';
 
 export default function App() {
   return (
@@ -16,7 +16,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/movie/:id" element={<Movie />} />
-          <Route path="/booking/:id" element={<SeatingLayout />} />
+          <Route path="/booking/:id" element={<TheaterSeating />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

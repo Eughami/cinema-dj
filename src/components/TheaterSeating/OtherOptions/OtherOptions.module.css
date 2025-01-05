@@ -1,0 +1,59 @@
+.container {
+  margin-top: 3rem;
+  padding: 2rem 0;
+}
+
+.title {
+  text-align: center;
+  color: #666;
+  font-size: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.options {
+  display: flex;
+  justify-content: space-around;
+  gap: 2rem;
+}
+
+.option {
+  flex: 1;
+  max-width: 400px;
+}
+
+.option h3 {
+  color: #4a148c;
+  margin-bottom: 0.5rem;
+}
+
+.option p {
+  color: #666;
+  margin-bottom: 1rem;
+}
+
+.chatButton {
+  background-color: #4a148c;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+.chatButton:hover {
+  background-color: #3a1070;
+}
+
+.phone {
+  display: block;
+  color: #4a148c;
+  font-size: 1.25rem;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.phone:hover {
+  text-decoration: underline;
+}

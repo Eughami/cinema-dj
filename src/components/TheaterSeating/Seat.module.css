@@ -1,0 +1,35 @@
+.seat {
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: all 0.2s ease;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+}
+
+.available {
+  background-color: #e1bee7;
+  color: #4a148c;
+}
+
+.available:hover {
+  background-color: #ce93d8;
+  transform: scale(1.05);
+}
+
+.selected {
+  background-color: #4a148c;
+  color: white;
+}
+
+.reserved {
+  background-color: #bdbdbd;
+  color: #757575;
+  cursor: not-allowed;
+}

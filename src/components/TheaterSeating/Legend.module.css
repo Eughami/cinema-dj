@@ -1,0 +1,31 @@
+.legend {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 3rem;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #333;
+}
+
+.legendSeat {
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+}
+
+.available {
+  background-color: #e1bee7;
+}
+
+.selected {
+  background-color: #4a148c;
+}
+
+.reserved {
+  background-color: #bdbdbd;
+}

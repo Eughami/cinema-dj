@@ -1,0 +1,88 @@
+.formContainer {
+  display: flex;
+  gap: 2rem;
+  margin-top: 3rem;
+  padding: 2rem;
+  background-color: #f8f8f8;
+  border-radius: 8px;
+}
+
+.formSection {
+  flex: 1;
+}
+
+.input {
+  width: 100%;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.input:focus {
+  outline: none;
+  border-color: #4a148c;
+}
+
+.captcha {
+  background-color: #fff;
+  padding: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.captchaPlaceholder {
+  color: #666;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.priceSection {
+  width: 300px;
+}
+
+.price {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.ticketIcon {
+  width: 32px;
+  height: 32px;
+}
+
+.amount {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.reserveButton {
+  width: 100%;
+  padding: 1rem;
+  background-color: #8e24aa;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.reserveButton:hover {
+  background-color: #7b1fa2;
+}
+
+.notice {
+  margin-top: 1rem;
+  padding: 1rem;
+  background-color: #fff3e0;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  color: #795548;
+}

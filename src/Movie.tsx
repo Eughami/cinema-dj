@@ -1,6 +1,5 @@
 import {
   BackgroundImage,
-  Badge,
   Button,
   Divider,
   Grid,
