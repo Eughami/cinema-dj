@@ -1,6 +1,6 @@
 import { Button } from '@mantine/core';
 import classes from './MovieTime.module.css';
-import { IconTicket } from '@tabler/icons-react';
+// import { IconTicket } from '@tabler/icons-react';
 
 const MovieTime = () => {
   const baseRoute = import.meta.env.VITE_BASE_ROUTE;
@@ -19,7 +19,7 @@ const MovieTime = () => {
           root: classes.mtButton,
           label: classes.mtButtonLabel,
         }}
-        leftSection={<IconTicket stroke={2} />}
+        // leftSection={<IconTicket stroke={2} />}
         radius="md"
         variant="outline"
         color="#620D8A"

@@ -8,6 +8,8 @@ import HomePage from './HomePage';
 import Movie from './Movie';
 import NotFound from './components/NotFound';
 import { TheaterSeating } from './components/TheaterSeating/TheaterSeating';
+import Admin from './Admin';
+import '@mantine/dates/styles.css';
 
 export default function App() {
   return (
@@ -17,6 +19,7 @@ export default function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/movie/:id" element={<Movie />} />
           <Route path="/booking/:id" element={<TheaterSeating />} />
+          <Route path="/admin" element={<Admin />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
