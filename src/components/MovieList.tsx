@@ -4,7 +4,7 @@ import { Movie } from '../type.ts';
 
 interface MovieListProps {
   title: string;
-  movies: Movie[];
+  movies: Movie[] | undefined;
 }
 const MovieList = (props: MovieListProps) => {
   const { title, movies } = props;
@@ -13,7 +13,7 @@ const MovieList = (props: MovieListProps) => {
       <h2 className={classes.title}>{title}</h2>
 
       <div className={classes.movieCardContainer}>
-        {movies.map((movie) => (
+        {movies?.map((movie) => (
           <MovieCard key={movie.id} movie={movie} />
         ))}
       </div>

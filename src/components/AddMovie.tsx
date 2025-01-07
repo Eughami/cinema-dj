@@ -139,14 +139,6 @@ const AddMovie = ({ movie, onClose }: { movie?: any; onClose: () => void }) => {
           <FileInput
             label="Image"
             accept="image/*"
-            onChange={setImage}
-            required={!movie}
-          />
-        </Grid.Col>
-        <Grid.Col span={6}>
-          <FileInput
-            label="Image"
-            accept="image/*"
             onChange={handleImageChange}
             required={!movie}
           />

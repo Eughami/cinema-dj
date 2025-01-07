@@ -10,8 +10,8 @@ import NotFound from './components/NotFound';
 import { TheaterSeating } from './components/TheaterSeating/TheaterSeating';
 import '@mantine/dates/styles.css';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import MovieDetails from './components/MovieDetails';
-import AdminMovieList from './components/AdminMovieList';
+import MovieDetails from './MovieDetails';
+import AdminMovieList from './AdminMovieList';
 
 export default function App() {
   const queryClient = new QueryClient();
@@ -24,7 +24,6 @@ export default function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/movie/:id" element={<Movie />} />
             <Route path="/booking/:id" element={<TheaterSeating />} />
-            {/* <Route path="/admin" element={<Admin />} /> */}
             <Route path="/admin" element={<AdminMovieList />} />
             <Route path="/admin/movie/:id" element={<MovieDetails />} />
             <Route path="*" element={<NotFound />} />

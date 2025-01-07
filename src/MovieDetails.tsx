@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'react-router';
 import { Table, Button, Text, Grid, Drawer, Image } from '@mantine/core';
 import axios from 'axios';
-import AddSession from './AddSession';
+import AddSession from './components/AddSession';
 
 const MovieDetails = () => {
   const { id } = useParams();

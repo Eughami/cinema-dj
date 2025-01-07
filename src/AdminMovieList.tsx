@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Table, Button, Drawer, Grid, Text } from '@mantine/core';
 import axios from 'axios';
-import AddMovie from './AddMovie';
+import AddMovie from './components/AddMovie';
 
 const AdminMovieList = () => {
   const [movies, setMovies] = useState<any[]>([]);

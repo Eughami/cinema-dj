@@ -6,14 +6,14 @@ import Autoplay from 'embla-carousel-autoplay';
 import { Movie } from '../type';
 
 interface HomeCarousselProps {
-  movies: Movie[];
+  movies: Movie[] | undefined;
 }
 const HomeCaroussel = (props: HomeCarousselProps) => {
   const { movies } = props;
 
   const autoplay = useRef(Autoplay({ delay: 3000 }));
 
-  const slides = movies.map((m) => (
+  const slides = movies?.map((m) => (
     <Carousel.Slide key={m.id}>
       <a title={m.title} href={`/movie/${m.id}`}>
         <Image
