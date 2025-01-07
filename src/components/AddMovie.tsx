@@ -10,15 +10,49 @@ import {
 import axios from 'axios';
 import { DateInput } from '@mantine/dates';
 
-const AddMovie = () => {
-  const [title, setTitle] = useState('');
-  const [duration, setDuration] = useState(0);
-  const [genre, setGenre] = useState('');
-  const [actors, setActors] = useState('');
-  const [releaseDate, setReleaseDate] = useState<Date | null>(null);
+const AddMovie = ({ movie, onClose }: { movie?: any; onClose: () => void }) => {
+  const [title, setTitle] = useState(movie?.title || '');
+  const [duration, setDuration] = useState(movie?.duration || 0);
+  const [genre, setGenre] = useState(movie?.genre || '');
+  const [actors, setActors] = useState(movie?.actors || '');
+  const [releaseDate, setReleaseDate] = useState<Date | null>(
+    movie?.release_date ? new Date(movie.release_date) : null
+  );
   const [image, setImage] = useState<File | null>(null);
   const [wideImage, setWideImage] = useState<File | null>(null);
-  const [description, setDescription] = useState('');
+  const [description, setDescription] = useState(movie?.description || '');
+
+  // Default image URLs from the movie prop
+  const defaultImageUrl = movie?.image || null;
+  const defaultWideImageUrl = movie?.wide_image || null;
+
+  // Preview URLs for selected files
+  const [imagePreview, setImagePreview] = useState<string | null>(
+    defaultImageUrl ? 'http://localhost:3000/' + defaultImageUrl : null
+  );
+  const [wideImagePreview, setWideImagePreview] = useState<string | null>(
+    defaultWideImageUrl ? 'http://localhost:3000/' + defaultWideImageUrl : null
+  );
+
+  const handleImageChange = (file: File | null) => {
+    setImage(file);
+    if (file) {
+      const previewUrl = URL.createObjectURL(file);
+      setImagePreview(previewUrl);
+    } else {
+      setImagePreview(defaultImageUrl); // Fallback to default URL if no file is selected
+    }
+  };
+
+  const handleWideImageChange = (file: File | null) => {
+    setWideImage(file);
+    if (file) {
+      const previewUrl = URL.createObjectURL(file);
+      setWideImagePreview(previewUrl);
+    } else {
+      setWideImagePreview(defaultWideImageUrl); // Fallback to default URL if no file is selected
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,18 +69,26 @@ const AddMovie = () => {
     if (wideImage) formData.append('wide_image', wideImage);
 
     try {
-      const response = await axios.post(
-        'http://localhost:3000/admin/movies',
-        formData,
-        {
+      if (movie) {
+        await axios.put(
+          `http://localhost:3000/admin/movies/${movie.id}`,
+          formData,
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          }
+        );
+      } else {
+        await axios.post('http://localhost:3000/admin/movies', formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
-        }
-      );
-      alert(`Movie added with ID: ${response.data.id}`);
+        });
+      }
+      onClose();
     } catch (error) {
-      alert('Failed to add movie');
+      alert('Failed to save movie');
       console.error(error);
     }
   };
@@ -98,15 +140,37 @@ const AddMovie = () => {
             label="Image"
             accept="image/*"
             onChange={setImage}
-            required
+            required={!movie}
           />
+        </Grid.Col>
+        <Grid.Col span={6}>
+          <FileInput
+            label="Image"
+            accept="image/*"
+            onChange={handleImageChange}
+            required={!movie}
+          />
+          {imagePreview && (
+            <img
+              src={imagePreview}
+              alt="Image Preview"
+              style={{ marginTop: '10px', maxWidth: 'auto', height: 100 }}
+            />
+          )}
         </Grid.Col>
         <Grid.Col span={6}>
           <FileInput
             label="Wide Image"
             accept="image/*"
-            onChange={setWideImage}
+            onChange={handleWideImageChange}
           />
+          {wideImagePreview && (
+            <img
+              src={wideImagePreview}
+              alt="Wide Image Preview"
+              style={{ marginTop: '10px', maxWidth: 'auto', height: 100 }}
+            />
+          )}
         </Grid.Col>
         <Grid.Col span={12}>
           <Textarea
@@ -118,7 +182,7 @@ const AddMovie = () => {
           />
         </Grid.Col>
         <Grid.Col span={12}>
-          <Button type="submit">Add Movie</Button>
+          <Button type="submit">Save Movie</Button>
         </Grid.Col>
       </Grid>
     </form>

@@ -1,10 +1,8 @@
 import { Button } from '@mantine/core';
 import classes from './MovieTime.module.css';
-// import { IconTicket } from '@tabler/icons-react';
+import { IconTicket } from '@tabler/icons-react';
 
 const MovieTime = () => {
-  const baseRoute = import.meta.env.VITE_BASE_ROUTE;
-
   return (
     <div className={classes.mtRoot}>
       <div className={classes.mtHour}>19:30</div>
@@ -15,18 +13,18 @@ const MovieTime = () => {
       </div>
       <Button
         size="md"
+        component="a"
+        href={`/booking/1`}
         classNames={{
           root: classes.mtButton,
           label: classes.mtButtonLabel,
         }}
-        // leftSection={<IconTicket stroke={2} />}
+        leftSection={<IconTicket stroke={2} />}
         radius="md"
         variant="outline"
         color="#620D8A"
       >
-        <a title="Buy ticket" href={`/${baseRoute}/booking/1`}>
-          Buy ticket
-        </a>
+        Buy ticket
       </Button>
     </div>
   );

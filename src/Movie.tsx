@@ -10,6 +10,7 @@ import { useNavigate, useParams } from 'react-router';
 import MovieProperty from './components/MovieProperty';
 import classes from './Movie.module.css';
 import MovieTime from './components/MovieTime';
+import useMovie from './api/movieDetails';
 
 const Movie = () => {
   const { id } = useParams(); // Get the `id` from the URL (as a string)
@@ -26,9 +27,17 @@ const Movie = () => {
       </div>
     );
   }
+  const { data: movie, isLoading, isError, error } = useMovie(numericId);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+  if (isError) {
+    return <div>Error: {error.message}</div>;
+  }
   // fetch the movie details
   return (
-    <BackgroundImage src="https://panel.starluxcinema.com/media/upload/mposter_6741e6d2eb8197.39440185.jpg">
+    <BackgroundImage src={`http://localhost:3000/${movie.image}`}>
       <div className={classes.movieRoot}>
         <Grid className={classes.gridRoot}>
           <Grid.Col span={{ base: 12, sm: 'content' }}>
@@ -36,20 +45,14 @@ const Movie = () => {
               radius="md"
               h={300}
               w={250}
-              src="https://panel.starluxcinema.com/media/upload/mposter_6741e6d2eb8197.39440185.jpg"
+              src={`http://localhost:3000/${movie.image}`}
               alt="movie poster"
             />
-            <MovieProperty label="Release Date" value="31.12.2024" />
-            <MovieProperty
-              label="Genre"
-              value="Drama, Animation, Adventure, Family"
-            />
-            <MovieProperty label="Duration" value="122 min" />
-            <MovieProperty label="Producer" value="Barry Jenkins" />
-            <MovieProperty
-              label="Actors"
-              value="Aaron Pierre, Kelvin Harrison Jr., Seth Rogen"
-            />
+            <MovieProperty label="Release Date" value={movie.release_date} />
+            <MovieProperty label="Genre" value={movie.genre} />
+            <MovieProperty label="Duration" value={`${movie.duration} min`} />
+            <MovieProperty label="Director" value="Barry Jenkins" />
+            <MovieProperty label="Actors" value={movie.actor} />
             <Button
               variant="filled"
               color="#f5efdf"
@@ -63,16 +66,11 @@ const Movie = () => {
           </Grid.Col>
           <Grid.Col span={{ base: 12, sm: 'auto' }}>
             <h2>
-              <span className={classes.movieTitle}>Mufasa: The Lion King</span>
+              <span className={classes.movieTitle}>{movie.title}</span>
               <span className={classes.movieBadge}>8+</span>
             </h2>
             <Divider my="md" />
-            <p>
-              Mufasa, a cub lost and alone, meets a sympathetic lion named Taka,
-              the heir to a royal bloodline. The chance meeting sets in motion
-              an expansive journey of a group of misfits searching for their
-              destiny.
-            </p>
+            <p>{movie.description}</p>
             <div className={classes.dateSelection}>
               <div className={classes.dateLeft}>
                 <img

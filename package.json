@@ -1,6 +1,5 @@
 {
               "name": "vite-min-template",
-              "homepage": "https://Eughami.github.io/cinema-dj/",
               "private": true,
               "version": "0.0.0",
               "type": "module",
@@ -17,6 +16,7 @@
                         "@mantine/dates": "^7.15.2",
                         "@mantine/hooks": "7.15.2",
                         "@tabler/icons-react": "^3.26.0",
+                        "@tanstack/react-query": "^5.62.15",
                         "axios": "^1.7.9",
                         "dayjs": "^1.11.13",
                         "embla-carousel-autoplay": "^7.1.0",

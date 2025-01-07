@@ -1,9 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button, Select, Grid, TextInput, NumberInput } from '@mantine/core';
 import { DateInput } from '@mantine/dates';
 import axios from 'axios';
 
-const AddSession = ({ movies }) => {
+const AddSession = ({ mId, mTitle, session, onSuccess }) => {
   const [selectedMovie, setSelectedMovie] = useState<string | null>(null);
   const [date, setDate] = useState<Date | null>(null);
   const [time, setTime] = useState<string>('');
@@ -11,14 +11,26 @@ const AddSession = ({ movies }) => {
   const [subtitle, setSubtitle] = useState('');
   const [hallNo, setHallNo] = useState(1);
 
+  useEffect(() => {
+    if (session) {
+      setSelectedMovie(session.movie_id.toString());
+      setDate(new Date(session.date));
+      setTime(session.time);
+      setAudio(session.audio);
+      setSubtitle(session.subtitle);
+      setHallNo(session.hall_no);
+    }
+  }, [session]);
+
   const handleSubmit = async () => {
-    if (!selectedMovie || !date || !time) {
+    console.log({ selectedMovie });
+    if (!mId || !date || !time) {
       alert('Please fill all fields');
       return;
     }
 
     const sessionData = {
-      movie_id: parseInt(selectedMovie),
+      movie_id: parseInt(mId),
       audio,
       subtitle,
       hall_no: hallNo,
@@ -27,13 +39,17 @@ const AddSession = ({ movies }) => {
     };
 
     try {
-      const response = await axios.post(
-        'http://localhost:3000/admin/sessions',
-        sessionData
-      );
-      alert(`Session added with ID: ${response.data.id}`);
+      if (session) {
+        await axios.put(
+          `http://localhost:3000/admin/sessions/${session.id}`,
+          sessionData
+        );
+      } else {
+        await axios.post('http://localhost:3000/admin/sessions', sessionData);
+      }
+      onSuccess();
     } catch (error) {
-      alert('Failed to add session');
+      alert('Failed to add/update session');
       console.error(error);
     }
   };
@@ -44,12 +60,15 @@ const AddSession = ({ movies }) => {
         <Select
           label="Select Movie"
           placeholder="Pick a movie"
-          data={movies.map((movie) => ({
-            value: movie.id.toString(),
-            label: movie.title,
-          }))}
-          value={selectedMovie}
-          onChange={setSelectedMovie}
+          data={[
+            {
+              value: mId.toString(),
+              label: mTitle,
+            },
+          ]}
+          value={mId.toString()}
+          disabled
+          // onChange={setSelectedMovie}
           required
         />
       </Grid.Col>
@@ -70,10 +89,12 @@ const AddSession = ({ movies }) => {
         />
       </Grid.Col>
       <Grid.Col span={6}>
-        <TextInput
+        <Select
           label="Audio"
+          placeholder="Select a language"
+          data={['English', 'French']}
           value={audio}
-          onChange={(e) => setAudio(e.target.value)}
+          onChange={(e) => setAudio(e)}
           required
         />
       </Grid.Col>
@@ -85,15 +106,19 @@ const AddSession = ({ movies }) => {
         />
       </Grid.Col>
       <Grid.Col span={6}>
-        <NumberInput
-          label="Hall Number"
-          value={hallNo}
-          onChange={(value) => setHallNo(value)}
+        <Select
+          label="Select Hall Number"
+          placeholder="Select a hall number ..."
+          data={['1', '2']}
+          value={hallNo.toString()}
+          onChange={(e) => setHallNo(parseInt(e, 10))}
           required
         />
       </Grid.Col>
       <Grid.Col span={12}>
-        <Button onClick={handleSubmit}>Add Session</Button>
+        <Button onClick={handleSubmit}>
+          {session ? 'Update Session' : 'Add Session'}
+        </Button>
       </Grid.Col>
     </Grid>
   );

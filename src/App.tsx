@@ -8,21 +8,29 @@ import HomePage from './HomePage';
 import Movie from './Movie';
 import NotFound from './components/NotFound';
 import { TheaterSeating } from './components/TheaterSeating/TheaterSeating';
-import Admin from './Admin';
 import '@mantine/dates/styles.css';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import MovieDetails from './components/MovieDetails';
+import AdminMovieList from './components/AdminMovieList';
 
 export default function App() {
+  const queryClient = new QueryClient();
+
   return (
     <MantineProvider theme={theme}>
-      <BrowserRouter basename="cinema-dj">
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/movie/:id" element={<Movie />} />
-          <Route path="/booking/:id" element={<TheaterSeating />} />
-          <Route path="/admin" element={<Admin />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
+      <QueryClientProvider client={queryClient}>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/movie/:id" element={<Movie />} />
+            <Route path="/booking/:id" element={<TheaterSeating />} />
+            {/* <Route path="/admin" element={<Admin />} /> */}
+            <Route path="/admin" element={<AdminMovieList />} />
+            <Route path="/admin/movie/:id" element={<MovieDetails />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </QueryClientProvider>
     </MantineProvider>
   );
 }
