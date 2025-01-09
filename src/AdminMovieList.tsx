@@ -1,7 +1,17 @@
 import { useState, useEffect } from 'react';
-import { Table, Button, Drawer, Grid, Text } from '@mantine/core';
+import {
+  Table,
+  Button,
+  Drawer,
+  Grid,
+  Text,
+  AppShell,
+  Container,
+} from '@mantine/core';
 import axios from 'axios';
 import AddMovie from './components/AddMovie';
+import { CiEdit } from 'react-icons/ci';
+import { FaRegTrashAlt, FaEye } from 'react-icons/fa';
 
 const AdminMovieList = () => {
   const [movies, setMovies] = useState<any[]>([]);
@@ -48,40 +58,70 @@ const AdminMovieList = () => {
   };
 
   return (
-    <div>
-      <Button onClick={handleAddMovie} mb="md">
+    <div style={{ padding: '1em' }}>
+      <Button onClick={handleAddMovie} m="md">
         Add New Movie
       </Button>
 
-      <Table>
-        <thead>
-          <tr>
-            <th>Title</th>
-            <th>Genre</th>
-            <th>Duration</th>
-            <th>Release Date</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
+      <Table highlightOnHover withColumnBorders>
+        <Table.Thead>
+          <Table.Tr>
+            <Table.Th></Table.Th>
+            <Table.Th>Title</Table.Th>
+            <Table.Th>Genre</Table.Th>
+            <Table.Th>Duration</Table.Th>
+            <Table.Th>Release Date</Table.Th>
+            <Table.Th>Actions</Table.Th>
+          </Table.Tr>
+        </Table.Thead>
+        <Table.Tbody>
           {movies.map((movie) => (
-            <tr key={movie.id}>
-              <td>{movie.title}</td>
-              <td>{movie.genre}</td>
-              <td>{movie.duration} minutes</td>
-              <td>{new Date(movie.release_date).toLocaleDateString()}</td>
-              <td>
-                <Button onClick={() => handleEdit(movie)}>Edit</Button>
-                <Button color="red" onClick={() => handleDelete(movie.id)}>
-                  Delete
+            <Table.Tr key={movie.id}>
+              <Table.Td>
+                <img
+                  src={`http://localhost:3000/${movie.image}`}
+                  alt="Image Preview"
+                  style={{ maxWidth: 'auto', height: 70 }}
+                />
+              </Table.Td>
+              <Table.Td>{movie.title}</Table.Td>
+              <Table.Td>{movie.genre}</Table.Td>
+              <Table.Td>{movie.duration} minutes</Table.Td>
+              <Table.Td>
+                {new Date(movie.release_date).toLocaleDateString('FR-fr')}
+              </Table.Td>
+              <Table.Td>
+                <Button
+                  mr="sm"
+                  variant="outline"
+                  size="xs"
+                  component="a"
+                  href={`admin/movie/${movie.id}`}
+                >
+                  <FaEye />
                 </Button>
-                <Button component="a" href={`admin/movie/${movie.id}`}>
-                  View Details
+                <Button
+                  mr="sm"
+                  // size="compact-xs"
+                  size="xs"
+                  variant="outline"
+                  onClick={() => handleEdit(movie)}
+                >
+                  <CiEdit />
                 </Button>
-              </td>
-            </tr>
+                <Button
+                  mr="sm"
+                  color="red"
+                  variant="outline"
+                  size="xs"
+                  onClick={() => handleDelete(movie.id)}
+                >
+                  <FaRegTrashAlt />
+                </Button>
+              </Table.Td>
+            </Table.Tr>
           ))}
-        </tbody>
+        </Table.Tbody>
       </Table>
 
       <Drawer

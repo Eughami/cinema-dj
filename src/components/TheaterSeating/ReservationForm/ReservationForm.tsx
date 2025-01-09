@@ -1,26 +1,29 @@
 import React, { useState } from 'react';
 import styles from './ReservationForm.module.css';
+import { userDetails } from '../../../type';
+import { Grid } from '@mantine/core';
 
-export const ReservationForm: React.FC = () => {
+interface IReservationFormProps {
+  onSubmit: (e: React.FormEvent, formData: userDetails) => void;
+  price: number;
+}
+const ReservationForm = (props: IReservationFormProps) => {
+  const { onSubmit, price } = props;
   const [formData, setFormData] = useState({
     email: '',
     phone: '',
     name: '',
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Handle form submission
-  };
-
   return (
-    <div className={styles.formContainer}>
-      <div className={styles.formSection}>
-        <form onSubmit={handleSubmit}>
+    <form onSubmit={(e) => onSubmit(e, formData)}>
+      <Grid className={styles.formContainer}>
+        <Grid.Col span={{ base: 12, sm: 6 }} className={styles.formSection}>
           <input
             type="email"
             placeholder="E-mail"
             value={formData.email}
+            required
             onChange={(e) =>
               setFormData({ ...formData, email: e.target.value })
             }
@@ -29,6 +32,7 @@ export const ReservationForm: React.FC = () => {
           <input
             type="tel"
             placeholder="Phone"
+            required
             value={formData.phone}
             onChange={(e) =>
               setFormData({ ...formData, phone: e.target.value })
@@ -37,7 +41,8 @@ export const ReservationForm: React.FC = () => {
           />
           <input
             type="text"
-            placeholder="First \ Last name"
+            placeholder="Name"
+            required
             value={formData.name}
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
             className={styles.input}
@@ -46,25 +51,27 @@ export const ReservationForm: React.FC = () => {
             {/* Placeholder for reCAPTCHA */}
             <div className={styles.captchaPlaceholder}>I'm not a robot</div>
           </div>
-        </form>
-      </div>
+        </Grid.Col>
 
-      <div className={styles.priceSection}>
-        <div className={styles.price}>
-          <img
-            src="/ticket-icon.svg"
-            alt="Ticket"
-            className={styles.ticketIcon}
-          />
-          <span className={styles.amount}>440TL</span>
-        </div>
-        <button className={styles.reserveButton}>TICKET RESERVATION</button>
-        <div className={styles.notice}>
-          Please note, that you must come to cinema <strong>1 hour</strong>{' '}
-          before the session start to purchase your ticket or your reservation
-          will be <strong>cancelled</strong>.
-        </div>
-      </div>
-    </div>
+        <Grid.Col span={{ base: 12, sm: 6 }} className={styles.priceSection}>
+          <div className={styles.price}>
+            <img
+              src="/ticket-icon.svg"
+              alt="Ticket"
+              className={styles.ticketIcon}
+            />
+            <span className={styles.amount}>{price} DJF</span>
+          </div>
+          <button className={styles.reserveButton}>TICKET RESERVATION</button>
+          <div className={styles.notice}>
+            Please note, that you must come to cinema <strong>1 hour </strong>
+            before the session start to purchase your ticket or your reservation
+            will be <strong>cancelled</strong>.
+          </div>
+        </Grid.Col>
+      </Grid>
+    </form>
   );
 };
+
+export default ReservationForm;

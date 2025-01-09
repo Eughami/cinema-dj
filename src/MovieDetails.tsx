@@ -3,6 +3,8 @@ import { useParams } from 'react-router';
 import { Table, Button, Text, Grid, Drawer, Image } from '@mantine/core';
 import axios from 'axios';
 import AddSession from './components/AddSession';
+import { CiEdit } from 'react-icons/ci';
+import { FaRegTrashAlt } from 'react-icons/fa';
 
 const MovieDetails = () => {
   const { id } = useParams();
@@ -55,52 +57,75 @@ const MovieDetails = () => {
   if (!movie) return <Text>Loading...</Text>;
 
   return (
-    <div>
-      <Text size="xl" mb="md">
+    <div style={{ padding: '1em' }}>
+      <Text size="xl" mb="md" fw="bolder">
         {movie.title}
       </Text>
-      <Image src={movie.imageUrl} alt={movie.title} mb="md" />
-      <Text mb="md">{movie.description}</Text>
+      <Grid>
+        <Grid.Col span="content">
+          <Image
+            src={`http://localhost:3000/${movie.image}`}
+            style={{ width: 100 }}
+            alt={movie.title}
+            mb="md"
+          />
+        </Grid.Col>
+        <Grid.Col span="auto">
+          <Text mb="md">{movie.description}</Text>
+        </Grid.Col>
+      </Grid>
 
       <Button onClick={() => setOpened(true)} mb="md">
         Add Session
       </Button>
 
-      <Text size="lg" mb="md">
+      <Text size="lg" mb="md" fw="bold">
         Sessions
       </Text>
-      <Table striped highlightOnHover>
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Time</th>
-            <th>Audio</th>
-            <th>Subtitle</th>
-            <th>Hall Number</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
+      <Table highlightOnHover withColumnBorders>
+        <Table.Thead>
+          <Table.Tr>
+            <Table.Th>Date</Table.Th>
+            <Table.Th>Time</Table.Th>
+            <Table.Th>Audio</Table.Th>
+            <Table.Th>Subtitle</Table.Th>
+            <Table.Th>Hall Number</Table.Th>
+            <Table.Th>Actions</Table.Th>
+          </Table.Tr>
+        </Table.Thead>
+        <Table.Tbody>
           {sessions.map((session) => (
-            <tr key={session.id}>
-              <td>{new Date(session.date).toLocaleDateString('FR-fr')}</td>
-              <td>{session.time}</td>
-              <td>{session.audio}</td>
-              <td>{session.subtitle}</td>
-              <td>{session.hall_no}</td>
-              <td>
+            <Table.Tr key={session.id}>
+              <Table.Td>
+                {new Date(session.date).toLocaleDateString('FR-fr')}
+              </Table.Td>
+              <Table.Td>{session.time}</Table.Td>
+              <Table.Td>{session.audio}</Table.Td>
+              <Table.Td>{session.subtitle}</Table.Td>
+              <Table.Td>{session.hall_no}</Table.Td>
+              <Table.Td>
                 <Button
+                  variant="outline"
+                  size="xs"
+                  mr="sm"
+                  onClick={() => handleEditSession(session)}
+                >
+                  <CiEdit />
+                </Button>
+                <Button
+                  variant="outline"
+                  size="xs"
+                  mr="sm"
                   color="red"
                   onClick={() => handleDeleteSession(session.id)}
                   mr="sm"
                 >
-                  Delete
+                  <FaRegTrashAlt />
                 </Button>
-                <Button onClick={() => handleEditSession(session)}>Edit</Button>
-              </td>
-            </tr>
+              </Table.Td>
+            </Table.Tr>
           ))}
-        </tbody>
+        </Table.Tbody>
       </Table>
 
       <Drawer

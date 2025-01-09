@@ -5,14 +5,23 @@ import {
   Grid,
   Image,
   Select,
+  Text,
 } from '@mantine/core';
 import { useNavigate, useParams } from 'react-router';
 import MovieProperty from './components/MovieProperty';
 import classes from './Movie.module.css';
 import MovieTime from './components/MovieTime';
 import useMovie from './api/movieDetails';
+import { useEffect, useState } from 'react';
+import { formatDate, parseDateFR } from './utils/date';
+import useMovieSession from './api/movieSession';
+import { Session } from './type';
 
 const Movie = () => {
+  const [selectedDate, setSelectedDate] = useState<string>(
+    new Date().toLocaleDateString('FR-fr')
+  );
+  const [dateSession, setDateSession] = useState<Session[]>([]);
   const { id } = useParams(); // Get the `id` from the URL (as a string)
   const navigate = useNavigate(); // For navigation
 
@@ -27,13 +36,28 @@ const Movie = () => {
       </div>
     );
   }
-  const { data: movie, isLoading, isError, error } = useMovie(numericId);
 
-  if (isLoading) {
+  const { data: movie, isLoading, isError, error } = useMovie(numericId);
+  const {
+    data: sessions,
+    isLoading: sL,
+    isError: isE,
+    error: sE,
+  } = useMovieSession(numericId);
+
+  useEffect(() => {
+    if (sessions?.length) {
+      setDateSession(
+        sessions.filter((ss) => ss.date == parseDateFR(selectedDate))
+      );
+    }
+  }, [sessions, selectedDate]);
+
+  if (isLoading || sL) {
     return <div>Loading...</div>;
   }
-  if (isError) {
-    return <div>Error: {error.message}</div>;
+  if (isError || isE) {
+    return <div>Error: {error?.message || sE?.message}</div>;
   }
   // fetch the movie details
   return (
@@ -78,7 +102,9 @@ const Movie = () => {
                   src="https://www.starluxcinema.com/assets/calendar-icon.svg"
                   alt="calendar"
                 />
-                <span className={classes.today}>Saturday, January 4, 2025</span>
+                <span className={classes.today}>
+                  {formatDate(parseDateFR(selectedDate))}
+                </span>
               </div>
               <div className={classes.dateRight}>
                 <Select
@@ -87,12 +113,28 @@ const Movie = () => {
                   }}
                   placeholder="Select another date ..."
                   // placeholder="choisissez une autre date"
-                  data={['Sunday, January 5, 2025', 'Angular', 'Vue', 'Svelte']}
+                  data={Array.from({ length: 6 }, (_, i) => {
+                    const date = new Date();
+                    date.setDate(date.getDate() + i);
+                    const dd = date.toLocaleDateString('FR-fr');
+                    return {
+                      value: dd,
+                      label: formatDate(parseDateFR(dd)),
+                      disabled: dd == selectedDate,
+                    };
+                  })}
+                  value={selectedDate}
+                  onChange={(value) => setSelectedDate(value)}
                 />
               </div>
             </div>
-            <MovieTime />
-            <MovieTime />
+            {dateSession?.length ? (
+              dateSession.map((s) => <MovieTime s={s} key={s.id} />)
+            ) : (
+              <Text c="dimmed" style={{ textAlign: 'center' }} p="xl">
+                No Session for the selected Date.
+              </Text>
+            )}
           </Grid.Col>
         </Grid>
       </div>
