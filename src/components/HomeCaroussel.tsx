@@ -15,9 +15,9 @@ const HomeCaroussel = (props: HomeCarousselProps) => {
 
   const slides = movies?.map((m) => (
     <Carousel.Slide key={m.id}>
-      <a title={m.title} href={`/movie/${m.id}`}>
+      <a title={m.title} href={`movie/${m.id}`}>
         <Image
-          src={`http://localhost:3000/${m.wide_image}`}
+          src={`https://cinema-api.eughami.com/${m.wide_image}`}
           className={classes.carouselImage}
         />
       </a>

@@ -1,9 +1,16 @@
 import { useState, useEffect } from 'react';
-import { Button, Select, Grid, TextInput, NumberInput } from '@mantine/core';
+import { Button, Select, Grid, TextInput } from '@mantine/core';
 import { DateInput } from '@mantine/dates';
 import axios from 'axios';
 
-const AddSession = ({ mId, mTitle, session, onSuccess }) => {
+type Iprops = {
+  mId: string;
+  mTitle: string;
+  session: any;
+  onSuccess: () => void;
+};
+const AddSession = (props: Iprops) => {
+  const { mId, mTitle, session, onSuccess } = props;
   const [selectedMovie, setSelectedMovie] = useState<string | null>(null);
   const [date, setDate] = useState<Date | null>(null);
   const [time, setTime] = useState<string>('');
@@ -41,11 +48,14 @@ const AddSession = ({ mId, mTitle, session, onSuccess }) => {
     try {
       if (session) {
         await axios.put(
-          `http://localhost:3000/admin/sessions/${session.id}`,
+          `https://cinema-api.eughami.com/admin/sessions/${session.id}`,
           sessionData
         );
       } else {
-        await axios.post('http://localhost:3000/admin/sessions', sessionData);
+        await axios.post(
+          'https://cinema-api.eughami.com/admin/sessions',
+          sessionData
+        );
       }
       onSuccess();
     } catch (error) {
@@ -94,7 +104,7 @@ const AddSession = ({ mId, mTitle, session, onSuccess }) => {
           placeholder="Select a language"
           data={['English', 'French']}
           value={audio}
-          onChange={(e) => setAudio(e)}
+          onChange={(e) => setAudio(e || '')}
           required
         />
       </Grid.Col>
@@ -111,7 +121,7 @@ const AddSession = ({ mId, mTitle, session, onSuccess }) => {
           placeholder="Select a hall number ..."
           data={['1', '2']}
           value={hallNo.toString()}
-          onChange={(e) => setHallNo(parseInt(e, 10))}
+          onChange={(e) => setHallNo(parseInt(e || '', 10))}
           required
         />
       </Grid.Col>

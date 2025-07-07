@@ -8,17 +8,17 @@ const MovieCard = (props: MovieCardProps) => {
   const { movie } = props;
   return (
     <div className={classes.movieCard}>
-      <a title={movie.title} href={`/movie/${movie.id}`}>
+      <a title={movie.title} href={`movie/${movie.id}`}>
         <Image
           radius="md"
           h={250}
           w={190}
-          src={`http://localhost:3000/${movie.image}`}
+          src={`https://cinema-api.eughami.com/${movie.image}`}
           alt="movie poster"
         />
       </a>
       <h3>
-        <a title={movie.title} href={`/movie/${movie.id}`}>
+        <a title={movie.title} href={`movie/${movie.id}`}>
           {movie.title}
         </a>
       </h3>

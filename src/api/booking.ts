@@ -1,10 +1,10 @@
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { Booking, Movie, Session } from '../type';
 
 const fetchSeats = async (id: number) => {
   const response = await axios.get(
-    `http://localhost:3000/sessions/${id}/seats`
+    `https://cinema-api.eughami.com/sessions/${id}/seats`
   );
   return response.data as {
     seats: string[];
@@ -21,23 +21,11 @@ const useSeats = (id: number) => {
 };
 
 const bookSeats = async (booking: Booking) => {
-  const response = await axios.post(`http://localhost:3000/book`, booking);
-  return response.data as { success: boolean };
+  const response = await axios.post(
+    `https://cinema-api.eughami.com/book`,
+    booking
+  );
+  return response.data;
 };
 
-// React Query hook for booking a seat
-const useBookSeat = () => {
-  return useMutation({
-    mutationFn: bookSeats,
-    onSuccess: (data) => {
-      console.log('Booking successful:', data);
-      // You can add additional logic here, like showing a success message
-    },
-    onError: (error) => {
-      console.error('Booking failed:', error);
-      // You can add additional logic here, like showing an error message
-    },
-  });
-};
-
-export { useSeats, useBookSeat };
+export { useSeats, bookSeats };

@@ -1,13 +1,5 @@
 import { useState, useEffect } from 'react';
-import {
-  Table,
-  Button,
-  Drawer,
-  Grid,
-  Text,
-  AppShell,
-  Container,
-} from '@mantine/core';
+import { Table, Button, Drawer } from '@mantine/core';
 import axios from 'axios';
 import AddMovie from './components/AddMovie';
 import { CiEdit } from 'react-icons/ci';
@@ -24,7 +16,7 @@ const AdminMovieList = () => {
 
   const fetchMovies = async () => {
     try {
-      const response = await axios.get('http://localhost:3000/movies');
+      const response = await axios.get('https://cinema-api.eughami.com/movies');
       setMovies(response.data);
     } catch (error) {
       console.error('Failed to fetch movies:', error);
@@ -34,7 +26,7 @@ const AdminMovieList = () => {
   const handleDelete = async (id: number) => {
     if (window.confirm('Are you sure you want to delete this movie?')) {
       try {
-        await axios.delete(`http://localhost:3000/admin/movies/${id}`);
+        await axios.delete(`https://cinema-api.eughami.com/admin/movies/${id}`);
         fetchMovies();
       } catch (error) {
         console.error('Failed to delete movie:', error);
@@ -79,7 +71,7 @@ const AdminMovieList = () => {
             <Table.Tr key={movie.id}>
               <Table.Td>
                 <img
-                  src={`http://localhost:3000/${movie.image}`}
+                  src={`https://cinema-api.eughami.com/${movie.image}`}
                   alt="Image Preview"
                   style={{ maxWidth: 'auto', height: 70 }}
                 />

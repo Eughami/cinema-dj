@@ -28,10 +28,12 @@ const AddMovie = ({ movie, onClose }: { movie?: any; onClose: () => void }) => {
 
   // Preview URLs for selected files
   const [imagePreview, setImagePreview] = useState<string | null>(
-    defaultImageUrl ? 'http://localhost:3000/' + defaultImageUrl : null
+    defaultImageUrl ? 'https://cinema-api.eughami.com/' + defaultImageUrl : null
   );
   const [wideImagePreview, setWideImagePreview] = useState<string | null>(
-    defaultWideImageUrl ? 'http://localhost:3000/' + defaultWideImageUrl : null
+    defaultWideImageUrl
+      ? 'https://cinema-api.eughami.com/' + defaultWideImageUrl
+      : null
   );
 
   const handleImageChange = (file: File | null) => {
@@ -71,7 +73,7 @@ const AddMovie = ({ movie, onClose }: { movie?: any; onClose: () => void }) => {
     try {
       if (movie) {
         await axios.put(
-          `http://localhost:3000/admin/movies/${movie.id}`,
+          `https://cinema-api.eughami.com/admin/movies/${movie.id}`,
           formData,
           {
             headers: {
@@ -80,11 +82,15 @@ const AddMovie = ({ movie, onClose }: { movie?: any; onClose: () => void }) => {
           }
         );
       } else {
-        await axios.post('http://localhost:3000/admin/movies', formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        });
+        await axios.post(
+          'https://cinema-api.eughami.com/admin/movies',
+          formData,
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          }
+        );
       }
       onClose();
     } catch (error) {

@@ -3,7 +3,9 @@ import axios from 'axios';
 import { Movie } from '../type';
 
 const fetchMovie = async (id: number) => {
-  const response = await axios.get(`http://localhost:3000/movies/${id}`);
+  const response = await axios.get(
+    `https://cinema-api.eughami.com/movies/${id}`
+  );
   return response.data as Movie;
 };
 

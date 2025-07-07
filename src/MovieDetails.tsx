@@ -20,7 +20,9 @@ const MovieDetails = () => {
 
   const fetchMovieDetails = async () => {
     try {
-      const response = await axios.get(`http://localhost:3000/movies/${id}`);
+      const response = await axios.get(
+        `https://cinema-api.eughami.com/movies/${id}`
+      );
       setMovie(response.data);
     } catch (error) {
       console.error('Failed to fetch movie details:', error);
@@ -30,7 +32,7 @@ const MovieDetails = () => {
   const fetchSessions = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:3000/movies/${id}/sessions`
+        `https://cinema-api.eughami.com/movies/${id}/sessions`
       );
       setSessions(response.data);
     } catch (error) {
@@ -41,7 +43,9 @@ const MovieDetails = () => {
   const handleDeleteSession = async (sessionId: number) => {
     if (window.confirm('Are you sure you want to delete this session?')) {
       try {
-        await axios.delete(`http://localhost:3000/admin/sessions/${sessionId}`);
+        await axios.delete(
+          `https://cinema-api.eughami.com/admin/sessions/${sessionId}`
+        );
         fetchSessions();
       } catch (error) {
         console.error('Failed to delete session:', error);
@@ -64,7 +68,7 @@ const MovieDetails = () => {
       <Grid>
         <Grid.Col span="content">
           <Image
-            src={`http://localhost:3000/${movie.image}`}
+            src={`https://cinema-api.eughami.com/${movie.image}`}
             style={{ width: 100 }}
             alt={movie.title}
             mb="md"
@@ -118,7 +122,6 @@ const MovieDetails = () => {
                   mr="sm"
                   color="red"
                   onClick={() => handleDeleteSession(session.id)}
-                  mr="sm"
                 >
                   <FaRegTrashAlt />
                 </Button>

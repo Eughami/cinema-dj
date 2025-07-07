@@ -4,7 +4,7 @@ import { Session } from '../type';
 
 const fetchMovieSession = async (id: number) => {
   const response = await axios.get(
-    `http://localhost:3000/movies/${id}/sessions`
+    `https://cinema-api.eughami.com/movies/${id}/sessions`
   );
   return response.data as Session[];
 };

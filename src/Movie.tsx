@@ -61,7 +61,7 @@ const Movie = () => {
   }
   // fetch the movie details
   return (
-    <BackgroundImage src={`http://localhost:3000/${movie.image}`}>
+    <BackgroundImage src={`https://cinema-api.eughami.com/${movie?.image}`}>
       <div className={classes.movieRoot}>
         <Grid className={classes.gridRoot}>
           <Grid.Col span={{ base: 12, sm: 'content' }}>
@@ -69,14 +69,14 @@ const Movie = () => {
               radius="md"
               h={300}
               w={250}
-              src={`http://localhost:3000/${movie.image}`}
+              src={`https://cinema-api.eughami.com/${movie?.image}`}
               alt="movie poster"
             />
-            <MovieProperty label="Release Date" value={movie.release_date} />
-            <MovieProperty label="Genre" value={movie.genre} />
-            <MovieProperty label="Duration" value={`${movie.duration} min`} />
+            <MovieProperty label="Release Date" value={movie!.release_date} />
+            <MovieProperty label="Genre" value={movie!.genre} />
+            <MovieProperty label="Duration" value={`${movie!.duration} min`} />
             <MovieProperty label="Director" value="Barry Jenkins" />
-            <MovieProperty label="Actors" value={movie.actor} />
+            <MovieProperty label="Actors" value={movie!.actor} />
             <Button
               variant="filled"
               color="#f5efdf"
@@ -90,11 +90,11 @@ const Movie = () => {
           </Grid.Col>
           <Grid.Col span={{ base: 12, sm: 'auto' }}>
             <h2>
-              <span className={classes.movieTitle}>{movie.title}</span>
+              <span className={classes.movieTitle}>{movie?.title}</span>
               <span className={classes.movieBadge}>8+</span>
             </h2>
             <Divider my="md" />
-            <p>{movie.description}</p>
+            <p>{movie?.description}</p>
             <div className={classes.dateSelection}>
               <div className={classes.dateLeft}>
                 <img
@@ -124,7 +124,7 @@ const Movie = () => {
                     };
                   })}
                   value={selectedDate}
-                  onChange={(value) => setSelectedDate(value)}
+                  onChange={(value) => setSelectedDate(value!)}
                 />
               </div>
             </div>

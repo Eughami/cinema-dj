@@ -19,7 +19,7 @@ const MovieTime = (props: MovieTimeProps) => {
       <Button
         size="md"
         component="a"
-        href={`/booking/${s.id}`}
+        href={`booking/${s.id}`}
         classNames={{
           root: classes.mtButton,
           label: classes.mtButtonLabel,

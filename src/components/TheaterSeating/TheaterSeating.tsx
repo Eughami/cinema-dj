@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styles from './TheaterSeating.module.css';
 import { Seat } from './Seat';
 import { Legend } from './Legend';
@@ -6,16 +6,29 @@ import ReservationForm from './ReservationForm/ReservationForm';
 import { OtherOptions } from './OtherOptions/OtherOptions';
 import type { SeatsMap, SeatStatus } from './types';
 import { useNavigate, useParams } from 'react-router';
-import { useBookSeat, useSeats } from '../../api/booking';
+import { bookSeats, useSeats } from '../../api/booking';
 import { formatDate } from '../../utils/date';
 import { Booking, userDetails } from '../../type';
-import { Box, LoadingOverlay } from '@mantine/core';
+import {
+  Box,
+  Button,
+  LoadingOverlay,
+  Modal,
+  Paper,
+  Stack,
+  Text,
+} from '@mantine/core';
+import { useMutation } from '@tanstack/react-query';
+import { QRCodeCanvas } from 'qrcode.react';
 
 export const TheaterSeating: React.FC = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [price, setPrice] = useState(0);
   const [selectedSeats, setSelectedSeats] = useState<string[]>([]);
+  const [opened, setOpened] = useState(false);
+  const [qcode, setQcode] = useState('');
+  const qrRef = useRef<HTMLCanvasElement | null>(null);
 
   const [seats, setSeats] = useState<SeatsMap>({
     A: Array.from({ length: 10 }, (_, i) => ({
@@ -43,7 +56,6 @@ export const TheaterSeating: React.FC = () => {
   // Convert `id` to a number and validate it
   const numericId = Number(id); // or parseInt(id, 10)
   const { data, isLoading, isError, error } = useSeats(numericId);
-  const { mutate, isPending } = useBookSeat();
 
   const handleSeatClick = (rowId: string, seatId: string) => {
     setSeats((prevSeats) => {
@@ -83,7 +95,7 @@ export const TheaterSeating: React.FC = () => {
 
       // Iterate over the seat IDs to reserve
       seatIds.forEach((seatId) => {
-        const [rowId, seatNumber] = seatId.split(/(\d+)/); // Split into row and number (e.g., 'A1' -> ['A', '1'])
+        const [rowId, __] = seatId.split(/(\d+)/); // Split into row and number (e.g., 'A1' -> ['A', '1'])
         const row = [...newSeats[rowId]];
 
         // Find the seat in the row
@@ -122,8 +134,51 @@ export const TheaterSeating: React.FC = () => {
     setPrice(1650 * sIds.length);
   }, [seats]);
 
+  const handleDownload = () => {
+    const canvas = qrRef.current;
+    if (!canvas) return;
+
+    const url = canvas.toDataURL('image/png');
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'booking-qr.png';
+    link.click();
+  };
+
+  const bookingMutation = useMutation({
+    mutationFn: bookSeats,
+    onSuccess: (data) => {
+      console.log('Booking successful:', data);
+      // You can add additional logic here, like showing a success message
+      //* show a QR Code that they can save (containing booking_id + session_id + phone_number ???)
+      //* or send an sms/email??
+      //*
+      const json = JSON.stringify(data.bookingSummary);
+      const base64 = btoa(json); // browser safe Base64
+      setQcode(base64);
+      setOpened(true);
+    },
+    onError: (error) => {
+      console.error('Booking failed:', error);
+      // You can add additional logic here, like showing an error message
+      //* if server returns error
+      //* most common (seats were taken)
+      //* "Veuillez selectionner d'autres sièges". with an okay message
+      //* when okay is clicked reload the page.
+      //* save his credentials if he filled the form and reload them then delete them.
+      // return { s: false, d: error };
+    },
+  });
+
   const handleSubmit = (e: React.FormEvent, formData: userDetails) => {
     e.preventDefault();
+    //! validate email??, number and name??
+    //! no need for captcha (use a combination of userIp+phoneNum)
+    //! if a reservation for the same session exists that has either
+    //! the same IP or same phone number
+    //! say "Vous avez deja fait une reservation pour cette session"
+    //! add unique IP constraints on the backend as well
+    //! Add a creation timestamp to the booking also (not updatable)
     console.log({ formData, selectedSeats });
     /**
      * export interface Booking {
@@ -139,11 +194,11 @@ export const TheaterSeating: React.FC = () => {
     const booking: Booking = {
       email: formData.email,
       name: formData.name,
-      phone_number: formData.phone,
+      phone_number: `77${formData.phone}`,
       seats: selectedSeats,
       session_id: numericId,
     };
-    mutate(booking);
+    bookingMutation.mutate(booking);
   };
 
   if (isNaN(numericId) || numericId <= 0) {
@@ -166,7 +221,7 @@ export const TheaterSeating: React.FC = () => {
   return (
     <Box pos="relative">
       <LoadingOverlay
-        visible={isPending}
+        visible={bookingMutation.isPending}
         zIndex={1000}
         overlayProps={{ radius: 'sm', blur: 2 }}
       />
@@ -182,7 +237,7 @@ export const TheaterSeating: React.FC = () => {
             </span>
             <div className={styles.showtime}>
               <span className={styles.date}>
-                {formatDate(data?.sessionDetails.date, true)}
+                {formatDate(data?.sessionDetails.date!, true)}
                 {data?.sessionDetails.time}
               </span>
               <span className={styles.hall}>
@@ -227,6 +282,37 @@ export const TheaterSeating: React.FC = () => {
         <ReservationForm onSubmit={handleSubmit} price={price} />
         <OtherOptions />
       </div>
+      <Modal
+        opened={opened}
+        onClose={() => setOpened(false)}
+        title="Your Booking QR Code"
+        centered
+        closeOnClickOutside={false}
+      >
+        <Stack align="center">
+          <QRCodeCanvas
+            ref={qrRef}
+            value={qcode}
+            size={300}
+            level="H"
+            includeMargin
+          />
+          <Paper
+            shadow="xs"
+            radius="md"
+            p="sm"
+            bg="#fff3cd"
+            style={{ border: '1px solid #ffeeba' }}
+          >
+            <Text size="sm" ta="center" c="black">
+              ⚠️ Keep this QR code. You’ll need it to pay for your reservation.
+            </Text>
+          </Paper>
+          <Button onClick={handleDownload} variant="outline">
+            Download as Image
+          </Button>
+        </Stack>
+      </Modal>
     </Box>
   );
 };
