@@ -106,7 +106,7 @@ const Movie = () => {
               <div className={classes.dateLeft}>
                 <img
                   className={classes.calendarIcon}
-                  src="https://www.starluxcinema.com/assets/calendar-icon.svg"
+                  src="/calendar-icon.svg"
                   alt="calendar"
                 />
                 <span className={classes.today}>
