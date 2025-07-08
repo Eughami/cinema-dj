@@ -4,6 +4,7 @@ import {
   Divider,
   Grid,
   Image,
+  LoadingOverlay,
   Select,
   Text,
 } from '@mantine/core';
@@ -54,7 +55,13 @@ const Movie = () => {
   }, [sessions, selectedDate]);
 
   if (isLoading || sL) {
-    return <div>Loading...</div>;
+    return (
+      <LoadingOverlay
+        visible
+        zIndex={1000}
+        overlayProps={{ radius: 'lg', blur: 2 }}
+      />
+    );
   }
   if (isError || isE) {
     return <div>Error: {error?.message || sE?.message}</div>;

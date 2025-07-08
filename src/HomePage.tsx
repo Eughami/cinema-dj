@@ -3,6 +3,7 @@ import useMovies from './api/movies';
 import HomeCaroussel from './components/HomeCaroussel';
 import MovieList from './components/MovieList';
 import { Movie } from './type';
+import { LoadingOverlay } from '@mantine/core';
 
 const HomePage = () => {
   const [currentMovies, setCurrentMovies] = useState<Movie[]>([]);
@@ -28,7 +29,13 @@ const HomePage = () => {
   }, [movies]);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <LoadingOverlay
+        visible
+        zIndex={1000}
+        overlayProps={{ radius: 'lg', blur: 2 }}
+      />
+    );
   }
   if (isError) {
     return <div>Error: {error.message}</div>;

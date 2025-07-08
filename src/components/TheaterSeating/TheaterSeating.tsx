@@ -10,6 +10,7 @@ import { bookSeats, useSeats } from '../../api/booking';
 import { formatDate } from '../../utils/date';
 import { Booking, userDetails } from '../../type';
 import {
+  Alert,
   Box,
   Button,
   LoadingOverlay,
@@ -221,7 +222,7 @@ export const TheaterSeating: React.FC = () => {
   return (
     <Box pos="relative">
       <LoadingOverlay
-        visible={bookingMutation.isPending}
+        visible={bookingMutation.isPending || isLoading}
         zIndex={1000}
         overlayProps={{ radius: 'sm', blur: 2 }}
       />
@@ -284,12 +285,24 @@ export const TheaterSeating: React.FC = () => {
       </div>
       <Modal
         opened={opened}
-        onClose={() => setOpened(false)}
+        onClose={() => {
+          window.location.reload();
+        }}
         title="Your Booking QR Code"
         centered
         closeOnClickOutside={false}
       >
         <Stack align="center">
+          <Alert
+            color="green"
+            radius="md"
+            title="Booking Successful!"
+            variant="light"
+            w="100%"
+          >
+            Your cinema seat has been reserved. Present this QR code at the
+            counter.
+          </Alert>
           <QRCodeCanvas
             ref={qrRef}
             value={qcode}
@@ -305,7 +318,7 @@ export const TheaterSeating: React.FC = () => {
             style={{ border: '1px solid #ffeeba' }}
           >
             <Text size="sm" ta="center" c="black">
-              ⚠️ Keep this QR code. You’ll need it to pay for your reservation.
+              ⚠️ Keep this QR code in a safe place or download it.
             </Text>
           </Paper>
           <Button onClick={handleDownload} variant="outline">

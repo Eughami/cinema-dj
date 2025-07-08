@@ -23,7 +23,7 @@ export default function App() {
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/movie/:id" element={<Movie />} />
-            <Route path="/booking/:id" element={<TheaterSeating />} />
+            <Route path="/movie/booking/:id" element={<TheaterSeating />} />
             <Route path="/admin" element={<AdminMovieList />} />
             <Route path="/admin/movie/:id" element={<MovieDetails />} />
             <Route path="*" element={<NotFound />} />
