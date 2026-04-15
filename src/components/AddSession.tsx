@@ -1,63 +1,153 @@
 import { useState, useEffect } from 'react';
-import { Button, Select, Grid, TextInput } from '@mantine/core';
+import {
+  Alert,
+  Badge,
+  Button,
+  Chip,
+  Grid,
+  Group,
+  Select,
+  Stack,
+  Text,
+  TextInput,
+  Title,
+} from '@mantine/core';
 import { DateInput } from '@mantine/dates';
 import axios from 'axios';
+import { FiCalendar, FiInfo } from 'react-icons/fi';
+
+type SessionFormData = {
+  id: number;
+  movie_id: number;
+  audio: string;
+  subtitle?: string;
+  hall_no: number;
+  date: string;
+  time: string;
+};
 
 type Iprops = {
-  mId: string;
+  mId: string | number;
   mTitle: string;
-  session: any;
+  session: SessionFormData | null;
   onSuccess: () => void;
 };
-const AddSession = (props: Iprops) => {
+
+const SCHEDULABLE_DAYS_COUNT = 21;
+const DEFAULT_SELECTED_DAYS_COUNT = 7;
+
+const toIsoDate = (value: Date): string => {
+  const year = value.getFullYear();
+  const month = String(value.getMonth() + 1).padStart(2, '0');
+  const day = String(value.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+};
+
+const fromIsoDate = (value: string): Date => new Date(`${value}T00:00:00`);
+
+const buildDateList = (startAtTomorrow = true, count = SCHEDULABLE_DAYS_COUNT) => {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  return Array.from({ length: count }, (_, index) => {
+    const day = new Date(today);
+    day.setDate(day.getDate() + index + (startAtTomorrow ? 1 : 0));
+    return toIsoDate(day);
+  });
+};
+
+const AddSession = (props: Iprops): JSX.Element => {
   const { mId, mTitle, session, onSuccess } = props;
-  const [selectedMovie, setSelectedMovie] = useState<string | null>(null);
   const [date, setDate] = useState<Date | null>(null);
+  const [selectedDates, setSelectedDates] = useState<string[]>([]);
   const [time, setTime] = useState<string>('');
   const [audio, setAudio] = useState('English');
   const [subtitle, setSubtitle] = useState('');
   const [hallNo, setHallNo] = useState(1);
 
+  const dateOptions = buildDateList();
+
   useEffect(() => {
     if (session) {
-      setSelectedMovie(session.movie_id.toString());
-      setDate(new Date(session.date));
+      setDate(fromIsoDate(session.date));
+      setSelectedDates([session.date]);
       setTime(session.time);
       setAudio(session.audio);
-      setSubtitle(session.subtitle);
+      setSubtitle(session.subtitle || '');
       setHallNo(session.hall_no);
+      return;
     }
+
+    const defaults = dateOptions.slice(0, DEFAULT_SELECTED_DAYS_COUNT);
+    setDate(fromIsoDate(defaults[0]));
+    setSelectedDates(defaults);
   }, [session]);
 
   const handleSubmit = async () => {
-    console.log({ selectedMovie });
-    if (!mId || !date || !time) {
+    if (!mId || !time) {
       alert('Please fill all fields');
       return;
     }
 
-    const sessionData = {
-      movie_id: parseInt(mId),
+    if (!session && selectedDates.length === 0) {
+      alert('Select at least one day to create sessions');
+      return;
+    }
+
+    const normalizedTime = time.trim();
+    const basePayload = {
+      movie_id: Number(mId),
       audio,
       subtitle,
       hall_no: hallNo,
-      date: date.toISOString().split('T')[0], // Format date as YYYY-MM-DD
-      time,
+      time: normalizedTime,
     };
 
     try {
       if (session) {
+        if (!date) {
+          alert('Please select a date');
+          return;
+        }
+
         await axios.put(
           `https://cinema-api.eughami.com/admin/sessions/${session.id}`,
-          sessionData
+          {
+            ...basePayload,
+            date: toIsoDate(date),
+          }
         );
+        onSuccess();
       } else {
-        await axios.post(
-          'https://cinema-api.eughami.com/admin/sessions',
-          sessionData
+        const createRequests = selectedDates.map((selectedDate) =>
+          axios.post('https://cinema-api.eughami.com/admin/sessions', {
+            ...basePayload,
+            date: selectedDate,
+          })
         );
+
+        const results = await Promise.allSettled(createRequests);
+        const createdCount = results.filter(
+          (result) => result.status === 'fulfilled'
+        ).length;
+        const failedCount = results.length - createdCount;
+
+        if (createdCount === 0) {
+          alert(
+            'No sessions were created. Check hall/date/time conflicts and try again.'
+          );
+          return;
+        }
+
+        if (failedCount > 0) {
+          alert(
+            `${createdCount} session(s) created, ${failedCount} failed (likely duplicate hall/date/time).`
+          );
+        }
+
+        onSuccess();
+        return;
       }
-      onSuccess();
     } catch (error) {
       alert('Failed to add/update session');
       console.error(error);
@@ -78,26 +168,29 @@ const AddSession = (props: Iprops) => {
           ]}
           value={mId.toString()}
           disabled
-          // onChange={setSelectedMovie}
           required
         />
       </Grid.Col>
-      <Grid.Col span={6}>
-        <DateInput
-          label="Select Date"
-          value={date}
-          onChange={setDate}
-          required
-        />
-      </Grid.Col>
-      <Grid.Col span={6}>
+      <Grid.Col span={session ? 6 : 12}>
         <TextInput
           label="Select Time"
           value={time}
           onChange={(e) => setTime(e.target.value)}
+          type="time"
+          placeholder="18:30"
           required
         />
       </Grid.Col>
+      {session && (
+        <Grid.Col span={6}>
+          <DateInput
+            label="Select Date"
+            value={date}
+            onChange={setDate}
+            required
+          />
+        </Grid.Col>
+      )}
       <Grid.Col span={6}>
         <Select
           label="Audio"
@@ -125,9 +218,53 @@ const AddSession = (props: Iprops) => {
           required
         />
       </Grid.Col>
+      {!session && (
+        <Grid.Col span={12}>
+          <Stack gap="xs">
+            <Group justify="space-between">
+              <Title order={5}>Select session days</Title>
+              <Badge variant="light" color="cyan" leftSection={<FiCalendar />}>
+                {selectedDates.length} selected
+              </Badge>
+            </Group>
+            <Alert
+              variant="light"
+              color="cyan"
+              icon={<FiInfo />}
+              title="Bulk creation enabled"
+            >
+              By default, tomorrow + next 6 days are selected. Toggle days to
+              create the same session time on all selected dates.
+            </Alert>
+            <Chip.Group
+              multiple
+              value={selectedDates}
+              onChange={setSelectedDates}
+            >
+              <Group gap="xs">
+                {dateOptions.map((dateOption) => {
+                  const parsedDate = fromIsoDate(dateOption);
+                  return (
+                    <Chip key={dateOption} value={dateOption} radius="md">
+                      {parsedDate.toLocaleDateString('en-US', {
+                        weekday: 'short',
+                        day: 'numeric',
+                        month: 'short',
+                      })}
+                    </Chip>
+                  );
+                })}
+              </Group>
+            </Chip.Group>
+            <Text size="sm" c="dimmed">
+              Conflicts for existing hall/date/time combinations are skipped.
+            </Text>
+          </Stack>
+        </Grid.Col>
+      )}
       <Grid.Col span={12}>
         <Button onClick={handleSubmit}>
-          {session ? 'Update Session' : 'Add Session'}
+          {session ? 'Update Session' : 'Create Sessions'}
         </Button>
       </Grid.Col>
     </Grid>

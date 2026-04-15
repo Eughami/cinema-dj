@@ -12,6 +12,7 @@ import '@mantine/dates/styles.css';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import MovieDetails from './MovieDetails';
 import AdminMovieList from './AdminMovieList';
+import AdminSessionDetails from './AdminSessionDetails';
 
 export default function App() {
   const queryClient = new QueryClient();
@@ -26,6 +27,10 @@ export default function App() {
             <Route path="/movie/booking/:id" element={<TheaterSeating />} />
             <Route path="/admin" element={<AdminMovieList />} />
             <Route path="/admin/movie/:id" element={<MovieDetails />} />
+            <Route
+              path="/admin/session/:id"
+              element={<AdminSessionDetails />}
+            />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
