@@ -88,3 +88,59 @@
 .aisle {
   width: 2rem;
 }
+
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+
+  .title {
+    font-size: 1.5rem;
+  }
+
+  .details {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .showtime {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .screen {
+    height: 40px;
+  }
+
+  .seatGrid {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 2px;
+  }
+
+  .seat {
+    width: 3.5%;
+    aspect-ratio: 1;
+    font-size: 0.6rem;
+  }
+
+  .aisle {
+    width: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .title {
+    font-size: 1.25rem;
+  }
+
+  .screen {
+    height: 30px;
+  }
+
+  .seat {
+    width: 9%;
+    font-size: 0.5rem;
+  }
+}

@@ -86,3 +86,44 @@
   font-size: 0.875rem;
   color: #795548;
 }
+
+@media (max-width: 768px) {
+  .formContainer {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+  }
+
+  .priceSection {
+    width: 100%;
+    order: -1;
+  }
+
+  .amount {
+    font-size: 1.5rem;
+  }
+
+  .ticketIcon {
+    width: 24px;
+    height: 24px;
+  }
+
+  .reserveButton {
+    padding: 0.875rem;
+  }
+
+  .notice {
+    font-size: 0.8125rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .amount {
+    font-size: 1.25rem;
+  }
+
+  .input {
+    padding: 0.625rem;
+    font-size: 0.9375rem;
+  }
+}

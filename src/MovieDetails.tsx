@@ -7,6 +7,7 @@ import {
   Drawer,
   Group,
   Image,
+  LoadingOverlay,
   Paper,
   ScrollArea,
   SimpleGrid,
@@ -52,6 +53,11 @@ const MovieDetails = (): JSX.Element => {
   const [selectedSession, setSelectedSession] = useState<SessionData | null>(
     null
   );
+  const [loadingActions, setLoadingActions] = useState<{
+    delete?: boolean;
+    edit?: boolean;
+    add?: boolean;
+  }>({});
 
   useEffect(() => {
     fetchMovieDetails();
@@ -82,6 +88,7 @@ const MovieDetails = (): JSX.Element => {
 
   const handleDeleteSession = async (sessionId: number) => {
     if (window.confirm('Are you sure you want to delete this session?')) {
+      setLoadingActions((prev) => ({ ...prev, delete: true }));
       try {
         await axios.delete(
           `https://cinema-api.eughami.com/admin/sessions/${sessionId}`
@@ -89,11 +96,14 @@ const MovieDetails = (): JSX.Element => {
         fetchSessions();
       } catch (error) {
         console.error('Failed to delete session:', error);
+      } finally {
+        setLoadingActions((prev) => ({ ...prev, delete: false }));
       }
     }
   };
 
   const handleEditSession = (session: SessionData) => {
+    setLoadingActions((prev) => ({ ...prev, edit: true }));
     setSelectedSession(session);
     setOpened(true);
   };
@@ -103,7 +113,7 @@ const MovieDetails = (): JSX.Element => {
     [sessions]
   );
 
-  if (!movie) {
+  if (!movie || !sessions) {
     return (
       <div className={styles.adminPage}>
         <div className={styles.adminContainer}>
@@ -137,6 +147,12 @@ const MovieDetails = (): JSX.Element => {
               >
                 Back to Movies
               </Button>
+              <div style={{ position: 'relative' }}>
+              <LoadingOverlay
+                visible={loadingActions.add}
+                zIndex={900}
+                overlayProps={{ radius: 'sm', blur: 2 }}
+              />
               <Button
                 variant="white"
                 color="dark"
@@ -149,6 +165,7 @@ const MovieDetails = (): JSX.Element => {
               >
                 Add Session
               </Button>
+            </div>
             </Group>
           </Group>
 
@@ -251,22 +268,36 @@ const MovieDetails = (): JSX.Element => {
                           >
                             <FaEye size={14} />
                           </ActionIcon>
-                          <ActionIcon
-                            variant="light"
-                            color="indigo"
-                            onClick={() => handleEditSession(session)}
-                            aria-label="Edit session"
-                          >
-                            <CiEdit size={17} />
-                          </ActionIcon>
-                          <ActionIcon
-                            variant="light"
-                            color="red"
-                            onClick={() => handleDeleteSession(session.id)}
-                            aria-label="Delete session"
-                          >
-                            <FaRegTrashAlt size={13} />
-                          </ActionIcon>
+                          <div style={{ position: 'relative' }}>
+                            <LoadingOverlay
+                              visible={loadingActions.edit}
+                              zIndex={900}
+                              overlayProps={{ radius: 'sm', blur: 2 }}
+                            />
+                            <ActionIcon
+                              variant="light"
+                              color="indigo"
+                              onClick={() => handleEditSession(session)}
+                              aria-label="Edit session"
+                            >
+                              <CiEdit size={17} />
+                            </ActionIcon>
+                          </div>
+                          <div style={{ position: 'relative' }}>
+                            <LoadingOverlay
+                              visible={loadingActions.delete}
+                              zIndex={900}
+                              overlayProps={{ radius: 'sm', blur: 2 }}
+                            />
+                            <ActionIcon
+                              variant="light"
+                              color="red"
+                              onClick={() => handleDeleteSession(session.id)}
+                              aria-label="Delete session"
+                            >
+                              <FaRegTrashAlt size={13} />
+                            </ActionIcon>
+                          </div>
                         </div>
                       </Table.Td>
                     </Table.Tr>
@@ -283,6 +314,7 @@ const MovieDetails = (): JSX.Element => {
         onClose={() => {
           setOpened(false);
           setSelectedSession(null);
+          setLoadingActions((prev) => ({ ...prev, edit: false, add: false }));
         }}
         title={selectedSession ? 'Edit Session' : 'Add Session'}
         padding="xl"
@@ -297,6 +329,7 @@ const MovieDetails = (): JSX.Element => {
             fetchSessions();
             setOpened(false);
             setSelectedSession(null);
+            setLoadingActions((prev) => ({ ...prev, edit: false, add: false }));
           }}
         />
       </Drawer>

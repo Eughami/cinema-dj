@@ -150,10 +150,6 @@ export const TheaterSeating: React.FC = () => {
     mutationFn: bookSeats,
     onSuccess: (data) => {
       console.log('Booking successful:', data);
-      // You can add additional logic here, like showing a success message
-      //* show a QR Code that they can save (containing booking_id + session_id + phone_number ???)
-      //* or send an sms/email??
-      //*
       const json = JSON.stringify(data.bookingSummary);
       const base64 = btoa(json); // browser safe Base64
       setQcode(base64);
@@ -161,13 +157,18 @@ export const TheaterSeating: React.FC = () => {
     },
     onError: (error) => {
       console.error('Booking failed:', error);
-      // You can add additional logic here, like showing an error message
-      //* if server returns error
-      //* most common (seats were taken)
-      //* "Veuillez selectionner d'autres sièges". with an okay message
-      //* when okay is clicked reload the page.
-      //* save his credentials if he filled the form and reload them then delete them.
-      // return { s: false, d: error };
+      if (error instanceof Error && 'response' in error) {
+        const response = (error as any).response;
+        if (response?.status === 409) {
+          alert('Vous avez déjà fait une réservation pour cette session');
+        } else if (response?.data?.details) {
+          alert('Veuillez sélectionner d\'autres sièges');
+        } else {
+          alert('Une erreur est survenue. Veuillez réessayer.');
+        }
+      } else {
+        alert('Une erreur est survenue. Veuillez réessayer.');
+      }
     },
   });
 
@@ -213,10 +214,25 @@ export const TheaterSeating: React.FC = () => {
   }
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <Box p="xl" ta="center">
+        <LoadingOverlay visible zIndex={1000} overlayProps={{ radius: 'lg', blur: 2 }}>
+          Loading seat selection...
+        </LoadingOverlay>
+      </Box>
+    );
   }
   if (isError) {
-    return <div>Error: {error?.message}</div>;
+    return (
+      <Box p="xl" ta="center">
+        <Text c="red" size="lg" fw={500}>
+          Error: {error?.message}
+        </Text>
+        <Button mt="md" onClick={() => window.location.reload()}>
+          Reload Page
+        </Button>
+      </Box>
+    );
   }
 
   return (
@@ -225,6 +241,7 @@ export const TheaterSeating: React.FC = () => {
         visible={bookingMutation.isPending || isLoading}
         zIndex={1000}
         overlayProps={{ radius: 'sm', blur: 2 }}
+        fallback={<Text ta="center" py="xl">Processing booking...</Text>}
       />
 
       <div className={styles.container}>

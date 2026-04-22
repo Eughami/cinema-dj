@@ -79,9 +79,10 @@ const ReservationForm = (props: IReservationFormProps) => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <Grid className={styles.formContainer}>
-        <Grid.Col span={{ base: 12, sm: 6 }} className={styles.formSection}>
+      <Grid className={styles.formContainer} cols={{ base: 12, sm: 12, md: 12 }}>
+        <Grid.Col span={{ base: 12, sm: 12 }} className={styles.formSection}>
           <input
+            type="email"
             placeholder="E-mail"
             value={formData.email}
             required
@@ -97,6 +98,7 @@ const ReservationForm = (props: IReservationFormProps) => {
           )}
 
           <input
+            type="tel"
             placeholder="77 XX XX XX"
             required
             value={formatPhone(formData.phone)}
@@ -110,6 +112,7 @@ const ReservationForm = (props: IReservationFormProps) => {
           )}
 
           <input
+            type="text"
             placeholder="Name"
             required
             value={formData.name}
@@ -123,7 +126,7 @@ const ReservationForm = (props: IReservationFormProps) => {
           )}
         </Grid.Col>
 
-        <Grid.Col span={{ base: 12, sm: 6 }} className={styles.priceSection}>
+        <Grid.Col span={{ base: 12, sm: 12 }} className={styles.priceSection}>
           <div className={styles.price}>
             <img
               src="/ticket-icon.svg"

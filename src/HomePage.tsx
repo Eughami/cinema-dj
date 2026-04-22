@@ -12,7 +12,6 @@ const HomePage = () => {
 
   useEffect(() => {
     if (movies?.length) {
-      console.log('Üpdateing movie');
       const todayDate = new Date().getTime();
       const cM: Movie[] = [];
       const fM: Movie[] = [];

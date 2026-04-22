@@ -5,6 +5,7 @@ import {
   Button,
   Drawer,
   Group,
+  LoadingOverlay,
   Paper,
   ScrollArea,
   SimpleGrid,
@@ -39,6 +40,11 @@ const AdminMovieList = (): JSX.Element => {
   const [movies, setMovies] = useState<AdminMovie[]>([]);
   const [drawerOpened, setDrawerOpened] = useState(false);
   const [selectedMovie, setSelectedMovie] = useState<AdminMovie | null>(null);
+  const [loadingActions, setLoadingActions] = useState<{
+    delete?: boolean;
+    edit?: boolean;
+    add?: boolean;
+  }>({});
 
   useEffect(() => {
     fetchMovies();
@@ -70,21 +76,26 @@ const AdminMovieList = (): JSX.Element => {
 
   const handleDelete = async (id: number) => {
     if (window.confirm('Are you sure you want to delete this movie?')) {
+      setLoadingActions((prev) => ({ ...prev, delete: true }));
       try {
         await axios.delete(`https://cinema-api.eughami.com/admin/movies/${id}`);
         fetchMovies();
       } catch (error) {
         console.error('Failed to delete movie:', error);
+      } finally {
+        setLoadingActions((prev) => ({ ...prev, delete: false }));
       }
     }
   };
 
   const handleEdit = (movie: AdminMovie) => {
+    setLoadingActions((prev) => ({ ...prev, edit: true }));
     setSelectedMovie(movie);
     setDrawerOpened(true);
   };
 
   const handleAddMovie = () => {
+    setLoadingActions((prev) => ({ ...prev, add: true }));
     setSelectedMovie(null);
     setDrawerOpened(true);
   };
@@ -95,6 +106,7 @@ const AdminMovieList = (): JSX.Element => {
 
   const handleDrawerClose = () => {
     setDrawerOpened(false);
+    setLoadingActions((prev) => ({ ...prev, edit: false, add: false }));
     fetchMovies();
   };
 
@@ -111,15 +123,22 @@ const AdminMovieList = (): JSX.Element => {
                 to session planning.
               </Text>
             </div>
-            <Button
-              onClick={handleAddMovie}
-              leftSection={<FiPlusCircle size={16} />}
-              color="dark"
-              variant="white"
-              radius="xl"
-            >
-              Add New Movie
-            </Button>
+            <div style={{ position: 'relative' }}>
+              <LoadingOverlay
+                visible={loadingActions.add}
+                zIndex={900}
+                overlayProps={{ radius: 'sm', blur: 2 }}
+              />
+              <Button
+                onClick={handleAddMovie}
+                leftSection={<FiPlusCircle size={16} />}
+                color="dark"
+                variant="white"
+                radius="xl"
+              >
+                Add New Movie
+              </Button>
+            </div>
           </Group>
 
           <SimpleGrid cols={{ base: 1, sm: 3 }} className={styles.statsGrid}>
@@ -218,22 +237,36 @@ const AdminMovieList = (): JSX.Element => {
                           >
                             <FaEye size={14} />
                           </ActionIcon>
-                          <ActionIcon
-                            variant="light"
-                            color="indigo"
-                            onClick={() => handleEdit(movie)}
-                            aria-label="Edit movie"
-                          >
-                            <CiEdit size={17} />
-                          </ActionIcon>
-                          <ActionIcon
-                            variant="light"
-                            color="red"
-                            onClick={() => handleDelete(movie.id)}
-                            aria-label="Delete movie"
-                          >
-                            <FaRegTrashAlt size={13} />
-                          </ActionIcon>
+                          <div style={{ position: 'relative' }}>
+                            <LoadingOverlay
+                              visible={loadingActions.edit}
+                              zIndex={900}
+                              overlayProps={{ radius: 'sm', blur: 2 }}
+                            />
+                            <ActionIcon
+                              variant="light"
+                              color="indigo"
+                              onClick={() => handleEdit(movie)}
+                              aria-label="Edit movie"
+                            >
+                              <CiEdit size={17} />
+                            </ActionIcon>
+                          </div>
+                          <div style={{ position: 'relative' }}>
+                            <LoadingOverlay
+                              visible={loadingActions.delete}
+                              zIndex={900}
+                              overlayProps={{ radius: 'sm', blur: 2 }}
+                            />
+                            <ActionIcon
+                              variant="light"
+                              color="red"
+                              onClick={() => handleDelete(movie.id)}
+                              aria-label="Delete movie"
+                            >
+                              <FaRegTrashAlt size={13} />
+                            </ActionIcon>
+                          </div>
                         </div>
                       </Table.Td>
                     </Table.Tr>
