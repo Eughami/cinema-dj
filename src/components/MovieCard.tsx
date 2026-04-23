@@ -1,6 +1,7 @@
 import { Image } from '@mantine/core';
 import classes from './MovieCard.module.css';
 import { Movie } from '../type';
+import { toAssetUrl } from '../config';
 interface MovieCardProps {
   movie: Movie;
 }
@@ -13,7 +14,7 @@ const MovieCard = (props: MovieCardProps) => {
           radius="md"
           h={250}
           w={190}
-          src={`https://cinema-api.eughami.com/${movie.image}`}
+          src={toAssetUrl(movie.image)}
           alt="movie poster"
         />
       </a>

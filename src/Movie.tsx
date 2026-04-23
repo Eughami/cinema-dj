@@ -17,17 +17,17 @@ import { useEffect, useState } from 'react';
 import { formatDate, parseDateFR } from './utils/date';
 import useMovieSession from './api/movieSession';
 import { Session } from './type';
+import { toAssetUrl } from './config';
 
 const Movie = () => {
   const [selectedDate, setSelectedDate] = useState<string>(
     new Date().toLocaleDateString('FR-fr')
   );
   const [dateSession, setDateSession] = useState<Session[]>([]);
-  const { id } = useParams(); // Get the `id` from the URL (as a string)
-  const navigate = useNavigate(); // For navigation
+  const { id } = useParams();
+  const navigate = useNavigate();
 
-  // Convert `id` to a number and validate it
-  const numericId = Number(id); // or parseInt(id, 10)
+  const numericId = Number(id);
   if (isNaN(numericId) || numericId <= 0) {
     return (
       <div>
@@ -49,7 +49,7 @@ const Movie = () => {
   useEffect(() => {
     if (sessions?.length) {
       setDateSession(
-        sessions.filter((ss) => ss.date == parseDateFR(selectedDate))
+        sessions.filter((ss) => ss.date === parseDateFR(selectedDate))
       );
     }
   }, [sessions, selectedDate]);
@@ -66,9 +66,9 @@ const Movie = () => {
   if (isError || isE) {
     return <div>Error: {error?.message || sE?.message}</div>;
   }
-  // fetch the movie details
+
   return (
-    <BackgroundImage src={`https://cinema-api.eughami.com/${movie?.image}`}>
+    <BackgroundImage src={toAssetUrl(movie?.image)}>
       <div className={classes.movieRoot}>
         <Grid className={classes.gridRoot}>
           <Grid.Col span={{ base: 12, sm: 'content' }}>
@@ -76,14 +76,13 @@ const Movie = () => {
               radius="md"
               h={300}
               w={250}
-              src={`https://cinema-api.eughami.com/${movie?.image}`}
+              src={toAssetUrl(movie?.image)}
               alt="movie poster"
             />
             <MovieProperty label="Release Date" value={movie!.release_date} />
-            <MovieProperty label="Genre" value={movie!.genre} />
+            <MovieProperty label="Genre" value={movie!.genre || ''} />
             <MovieProperty label="Duration" value={`${movie!.duration} min`} />
-            <MovieProperty label="Director" value="Barry Jenkins" />
-            <MovieProperty label="Actors" value={movie!.actor} />
+            <MovieProperty label="Actors" value={movie!.actors || ''} />
             <Button
               variant="filled"
               color="#f5efdf"
@@ -119,7 +118,6 @@ const Movie = () => {
                     input: classes.selectRoot,
                   }}
                   placeholder="Select another date ..."
-                  // placeholder="choisissez une autre date"
                   data={Array.from({ length: 6 }, (_, i) => {
                     const date = new Date();
                     date.setDate(date.getDate() + i);
@@ -127,7 +125,7 @@ const Movie = () => {
                     return {
                       value: dd,
                       label: formatDate(parseDateFR(dd)),
-                      disabled: dd == selectedDate,
+                      disabled: dd === selectedDate,
                     };
                   })}
                   value={selectedDate}
@@ -138,7 +136,7 @@ const Movie = () => {
             {dateSession?.length ? (
               dateSession.map((s) => <MovieTime s={s} key={s.id} />)
             ) : (
-              <Text c="dimmed" style={{ textAlign: 'center' }} p="xl">
+              <Text className={classes.noSessionText} p="xl">
                 No Session for the selected Date.
               </Text>
             )}

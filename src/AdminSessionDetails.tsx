@@ -12,6 +12,7 @@ import {
 import { FiArrowLeft, FiUsers } from 'react-icons/fi';
 import axios from 'axios';
 import styles from './admin/AdminRoutes.module.css';
+import { getAdminRequestConfig, toApiUrl } from './config';
 
 interface SessionData {
   id: number;
@@ -71,7 +72,8 @@ const AdminSessionDetails = (): JSX.Element => {
 
       try {
         const response = await axios.get<SessionDetailsResponse>(
-          `https://cinema-api.eughami.com/admin/sessions/${sessionId}/details`
+          toApiUrl(`/admin/sessions/${sessionId}/details`),
+          getAdminRequestConfig()
         );
         setData(response.data);
       } catch (fetchError) {

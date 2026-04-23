@@ -21,6 +21,7 @@ import {
 } from '@mantine/core';
 import { useMutation } from '@tanstack/react-query';
 import { QRCodeCanvas } from 'qrcode.react';
+import axios from 'axios';
 
 export const TheaterSeating: React.FC = () => {
   const { id } = useParams();
@@ -75,7 +76,7 @@ export const TheaterSeating: React.FC = () => {
       newSeats[rowId] = row;
       // if more than 5 seats are selected return old state
       let count = 0;
-      Object.keys(newSeats).map((s) => {
+      Object.keys(newSeats).forEach((s) => {
         newSeats[s].forEach((seat) => {
           if (seat.status === 'selected') {
             count++;
@@ -121,10 +122,10 @@ export const TheaterSeating: React.FC = () => {
       handleReserveSeats(data.seats);
     }
   }, [data]);
+
   useEffect(() => {
-    console.log('Seats updated');
     const sIds: string[] = [];
-    Object.keys(seats).map((s) => {
+    Object.keys(seats).forEach((s) => {
       seats[s].forEach((seat) => {
         if (seat.status === 'selected') {
           sIds.push(seat.id);
@@ -149,7 +150,6 @@ export const TheaterSeating: React.FC = () => {
   const bookingMutation = useMutation({
     mutationFn: bookSeats,
     onSuccess: (data) => {
-      console.log('Booking successful:', data);
       const json = JSON.stringify(data.bookingSummary);
       const base64 = btoa(json); // browser safe Base64
       setQcode(base64);
@@ -157,8 +157,8 @@ export const TheaterSeating: React.FC = () => {
     },
     onError: (error) => {
       console.error('Booking failed:', error);
-      if (error instanceof Error && 'response' in error) {
-        const response = (error as any).response;
+      if (axios.isAxiosError(error)) {
+        const response = error.response;
         if (response?.status === 409) {
           alert('Vous avez déjà fait une réservation pour cette session');
         } else if (response?.data?.details) {
@@ -181,18 +181,6 @@ export const TheaterSeating: React.FC = () => {
     //! say "Vous avez deja fait une reservation pour cette session"
     //! add unique IP constraints on the backend as well
     //! Add a creation timestamp to the booking also (not updatable)
-    console.log({ formData, selectedSeats });
-    /**
-     * export interface Booking {
-        id: number;
-        session_id: number;
-        name: string;
-        email: string;
-        phone_number: string;
-        seats: string[];
-      }
-     */
-    //TODO. in future check ip address
     const booking: Booking = {
       email: formData.email,
       name: formData.name,
@@ -241,7 +229,6 @@ export const TheaterSeating: React.FC = () => {
         visible={bookingMutation.isPending || isLoading}
         zIndex={1000}
         overlayProps={{ radius: 'sm', blur: 2 }}
-        fallback={<Text ta="center" py="xl">Processing booking...</Text>}
       />
 
       <div className={styles.container}>

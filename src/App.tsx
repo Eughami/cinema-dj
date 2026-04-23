@@ -13,27 +13,33 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import MovieDetails from './MovieDetails';
 import AdminMovieList from './AdminMovieList';
 import AdminSessionDetails from './AdminSessionDetails';
+import NotificationProvider from './notifications/NotificationProvider';
+import ErrorBoundary from './ErrorBoundary';
+
+const queryClient = new QueryClient();
 
 export default function App() {
-  const queryClient = new QueryClient();
-
   return (
     <MantineProvider theme={theme}>
       <QueryClientProvider client={queryClient}>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/movie/:id" element={<Movie />} />
-            <Route path="/movie/booking/:id" element={<TheaterSeating />} />
-            <Route path="/admin" element={<AdminMovieList />} />
-            <Route path="/admin/movie/:id" element={<MovieDetails />} />
-            <Route
-              path="/admin/session/:id"
-              element={<AdminSessionDetails />}
-            />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
+        <ErrorBoundary>
+          <NotificationProvider>
+            <BrowserRouter>
+              <Routes>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/movie/:id" element={<Movie />} />
+                <Route path="/movie/booking/:id" element={<TheaterSeating />} />
+                <Route path="/admin" element={<AdminMovieList />} />
+                <Route path="/admin/movie/:id" element={<MovieDetails />} />
+                <Route
+                  path="/admin/session/:id"
+                  element={<AdminSessionDetails />}
+                />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </BrowserRouter>
+          </NotificationProvider>
+        </ErrorBoundary>
       </QueryClientProvider>
     </MantineProvider>
   );
