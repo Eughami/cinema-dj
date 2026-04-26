@@ -1307,7 +1307,7 @@
           languageName: node
           linkType: hard
         
-        "embla-carousel@npm:7.1.0":
+        "embla-carousel@npm:7.1.0, embla-carousel@npm:^7.1.0":
           version: 7.1.0
           resolution: "embla-carousel@npm:7.1.0"
           checksum: 10c0/3fcfe5b287c5d09d35dac76b6612567cf6f15abdae0bbf7d10754db9f732dd90cdfdf5bc7405d8fb3f65542bdead09971e93e024a0db9b3f1fcc653a70e733bc
@@ -2845,7 +2845,7 @@
           bin:
             tsc: bin/tsc
             tsserver: bin/tsserver
-          checksum: 10c0/f3b8082c9d1d1629a215245c9087df56cb784f9fb6f27b5d55577a20e68afe2a889c040aacff6d27e35be165ecf9dca66e694c42eb9a50b3b2c451b36b5675cb
+          checksum: 10c0/b952bb8e1788cb9c7824f17bcc104af7b91bafb99b4ee7711272fe218823fa41299cc328d5646e873ea4173b658040c46bf6b4bd853594edbc3d15793b4ceb62
           languageName: node
           linkType: hard
         
@@ -2985,6 +2985,7 @@
             "@vitejs/plugin-react": "npm:^4.3.4"
             axios: "npm:^1.7.9"
             dayjs: "npm:^1.11.13"
+            embla-carousel: "npm:^7.1.0"
             embla-carousel-autoplay: "npm:^7.1.0"
             embla-carousel-react: "npm:^7.1.0"
             gh-pages: "npm:^6.2.0"

@@ -27,8 +27,8 @@ export const formatDate = (dateString: string, noD = false) => {
     'Friday',
     'Saturday',
   ];
-  if (noD) return ` ${date} ${months[month]} ${year}`;
-  return ` ${days[day]} ${date} ${months[month]} ${year}`;
+  if (noD) return ` ${date} ${months[month]} ${year} `;
+  return ` ${days[day]} ${date} ${months[month]} ${year} `;
 };
 
 export const parseDateFR = (dateString: string) => {
