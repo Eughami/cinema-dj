@@ -1,11 +1,10 @@
-import React, { Component, ErrorInfo, ReactNode } from 'react';
+import { Component, ErrorInfo, ReactNode } from 'react';
 import {
   Alert,
   Button,
   Group,
   Stack,
   Text,
-  Title,
 } from '@mantine/core';
 import { FiAlertTriangle } from 'react-icons/fi';
 

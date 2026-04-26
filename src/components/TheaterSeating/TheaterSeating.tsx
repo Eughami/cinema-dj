@@ -22,6 +22,7 @@ import {
 import { useMutation } from '@tanstack/react-query';
 import { QRCodeCanvas } from 'qrcode.react';
 import axios from 'axios';
+import { useNotify } from '../../notifications/NotificationProvider';
 
 export const TheaterSeating: React.FC = () => {
   const { id } = useParams();
@@ -31,6 +32,7 @@ export const TheaterSeating: React.FC = () => {
   const [opened, setOpened] = useState(false);
   const [qcode, setQcode] = useState('');
   const qrRef = useRef<HTMLCanvasElement | null>(null);
+  const { warning } = useNotify();
 
   const [seats, setSeats] = useState<SeatsMap>({
     A: Array.from({ length: 10 }, (_, i) => ({
@@ -60,12 +62,29 @@ export const TheaterSeating: React.FC = () => {
   const { data, isLoading, isError, error } = useSeats(numericId);
 
   const handleSeatClick = (rowId: string, seatId: string) => {
+    const currentSeat = seats[rowId].find((seat) => seat.id === seatId);
+    if (!currentSeat || currentSeat.status === 'reserved') return;
+
+    const selectedSeatsCount = Object.values(seats).reduce((count, row) => {
+      return count + row.filter((seat) => seat.status === 'selected').length;
+    }, 0);
+
+    if (currentSeat.status === 'available' && selectedSeatsCount >= 5) {
+      warning(
+        'You can only select up to 5 seats at once.',
+        'Seat limit reached',
+      );
+      return;
+    }
+
     setSeats((prevSeats) => {
       const newSeats = { ...prevSeats };
       const row = [...newSeats[rowId]];
       const seatIndex = row.findIndex((seat) => seat.id === seatId);
 
-      if (row[seatIndex].status === 'reserved') return prevSeats;
+      if (seatIndex === -1 || row[seatIndex].status === 'reserved') {
+        return prevSeats;
+      }
 
       row[seatIndex] = {
         ...row[seatIndex],
@@ -74,19 +93,6 @@ export const TheaterSeating: React.FC = () => {
       };
 
       newSeats[rowId] = row;
-      // if more than 5 seats are selected return old state
-      let count = 0;
-      Object.keys(newSeats).forEach((s) => {
-        newSeats[s].forEach((seat) => {
-          if (seat.status === 'selected') {
-            count++;
-          }
-        });
-      });
-      if (count > 5) {
-        alert('You can only select up to 5 seats at once');
-        return prevSeats;
-      }
       return newSeats;
     });
   };
@@ -257,31 +263,33 @@ export const TheaterSeating: React.FC = () => {
         </div>
         <Legend />
 
-        <div className={styles.seatingArea}>
-          {Object.entries(seats).map(([rowId, rowSeats]) => (
-            <div key={rowId} className={styles.row}>
-              <div className={styles.rowLabel}>{rowId}</div>
-              <div className={styles.seats}>
-                {rowSeats.slice(0, 5).map((seat) => (
-                  <Seat
-                    key={seat.id}
-                    status={seat.status}
-                    onClick={() => handleSeatClick(rowId, seat.id)}
-                    seatNumber={seat.id.slice(1)}
-                  />
-                ))}
-                <div className={styles.aisle} />
-                {rowSeats.slice(5).map((seat) => (
-                  <Seat
-                    key={seat.id}
-                    status={seat.status}
-                    onClick={() => handleSeatClick(rowId, seat.id)}
-                    seatNumber={seat.id.slice(1)}
-                  />
-                ))}
+        <div className={styles.seatingScroll}>
+          <div className={styles.seatingArea}>
+            {Object.entries(seats).map(([rowId, rowSeats]) => (
+              <div key={rowId} className={styles.row}>
+                <div className={styles.rowLabel}>{rowId}</div>
+                <div className={styles.seats}>
+                  {rowSeats.slice(0, 5).map((seat) => (
+                    <Seat
+                      key={seat.id}
+                      status={seat.status}
+                      onClick={() => handleSeatClick(rowId, seat.id)}
+                      seatNumber={seat.id.slice(1)}
+                    />
+                  ))}
+                  <div className={styles.aisle} />
+                  {rowSeats.slice(5).map((seat) => (
+                    <Seat
+                      key={seat.id}
+                      status={seat.status}
+                      onClick={() => handleSeatClick(rowId, seat.id)}
+                      seatNumber={seat.id.slice(1)}
+                    />
+                  ))}
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
 
         <ReservationForm onSubmit={handleSubmit} price={price} />

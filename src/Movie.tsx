@@ -71,7 +71,7 @@ const Movie = () => {
     <BackgroundImage src={toAssetUrl(movie?.image)}>
       <div className={classes.movieRoot}>
         <Grid className={classes.gridRoot}>
-          <Grid.Col span={{ base: 12, sm: 'content' }}>
+          <Grid.Col span={{ base: 12, sm: 'content' }} className={classes.movieInfoCol}>
             <Image
               radius="md"
               h={300}
@@ -94,7 +94,7 @@ const Movie = () => {
               Watch Trailer
             </Button>
           </Grid.Col>
-          <Grid.Col span={{ base: 12, sm: 'auto' }}>
+          <Grid.Col span={{ base: 12, sm: 'auto' }} className={classes.sessionsCol}>
             <h2>
               <span className={classes.movieTitle}>{movie?.title}</span>
               <span className={classes.movieBadge}>8+</span>
@@ -133,6 +133,7 @@ const Movie = () => {
                 />
               </div>
             </div>
+            <div className={classes.sessionContainer}>
             {dateSession?.length ? (
               dateSession.map((s) => <MovieTime s={s} key={s.id} />)
             ) : (
@@ -140,6 +141,7 @@ const Movie = () => {
                 No Session for the selected Date.
               </Text>
             )}
+            </div>
           </Grid.Col>
         </Grid>
       </div>

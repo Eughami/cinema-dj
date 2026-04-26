@@ -1,15 +1,12 @@
 import React, { createContext, useCallback, useContext, useRef, useState } from 'react';
 import {
-  Alert,
-  Button,
-  Group,
+  Box,
+  Notification,
+  Portal,
   Stack,
   Text,
-  Portal,
-  Box,
 } from '@mantine/core';
 import {
-  FiX,
   FiCheckCircle,
   FiAlertCircle,
   FiInfo,
@@ -97,18 +94,21 @@ export default function NotificationProvider({ children }: { children: React.Rea
     <NotificationContext.Provider value={{ notify, success, error, warning, info }}>
       {children}
       <Portal>
-        <Box
-          pos="fixed"
-          top={16}
-          right={16}
-          zIndex={9999}
-          style={{ maxWidth: 380, width: '100%' }}
+      <Box
+          style={{
+            position: 'fixed',
+            top: 16,
+            right: 16,
+            zIndex: 9999,
+            maxWidth: 380,
+            width: '100%',
+          }}
         >
           <Stack gap="sm">
             {list.map((n) => {
               const cfg = typeConfig[n.type];
               return (
-                <Alert
+                <Notification
                   key={n.id}
                   icon={cfg.icon}
                   color={cfg.color}
@@ -119,7 +119,7 @@ export default function NotificationProvider({ children }: { children: React.Rea
                   withCloseButton
                 >
                   <Text size="sm">{n.message}</Text>
-                </Alert>
+                </Notification>
               );
             })}
           </Stack>
