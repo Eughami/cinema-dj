@@ -22,6 +22,7 @@ import { FaEye, FaRegTrashAlt } from 'react-icons/fa';
 import { FiArrowLeft, FiCalendar } from 'react-icons/fi';
 import styles from './admin/AdminRoutes.module.css';
 import { getAdminRequestConfig, toApiUrl, toAssetUrl } from './config';
+import AdminLogoutButton from './admin/AdminLogoutButton';
 
 interface MovieDetailsData {
   id: number;
@@ -136,6 +137,7 @@ const MovieDetails = (): JSX.Element => {
               </Text>
             </div>
             <Group gap="xs">
+              <AdminLogoutButton />
               <Button
                 variant="white"
                 color="dark"

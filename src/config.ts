@@ -1,16 +1,16 @@
+import { getAdminToken } from './admin/adminAuth';
+
 const rawApiBaseUrl =
   import.meta.env.VITE_API_BASE_URL ||
   import.meta.env.VITE_API_URL ||
   'http://localhost:3000';
-
-const rawAdminToken = import.meta.env.VITE_ADMIN_TOKEN || '';
 
 export const API_BASE_URL = rawApiBaseUrl.replace(/\/+$/, '');
 
 export const getAdminRequestConfig = (): {
   headers?: Record<string, string>;
 } => {
-  const adminToken = rawAdminToken.trim();
+  const adminToken = getAdminToken();
 
   if (!adminToken) {
     return {};

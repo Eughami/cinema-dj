@@ -13,4 +13,8 @@ cp .env.example .env
 ```
 
 - `VITE_API_BASE_URL`: backend base URL
-- `VITE_ADMIN_TOKEN`: token used for admin endpoints (`/admin/*`)
+
+## Admin access
+
+- Open `/admin/login` and sign in with backend admin credentials.
+- The JWT is stored in browser localStorage and sent as bearer token for `/admin/*` API calls.

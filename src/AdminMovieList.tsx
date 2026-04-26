@@ -21,6 +21,7 @@ import { FiFilm, FiPlusCircle } from 'react-icons/fi';
 import { useNavigate } from 'react-router';
 import styles from './admin/AdminRoutes.module.css';
 import { getAdminRequestConfig, toApiUrl, toAssetUrl } from './config';
+import AdminLogoutButton from './admin/AdminLogoutButton';
 
 interface AdminMovie {
   id: number;
@@ -127,22 +128,25 @@ const AdminMovieList = (): JSX.Element => {
                 to session planning.
               </Text>
             </div>
-            <div style={{ position: 'relative' }}>
-              <LoadingOverlay
-                visible={loadingActions.add}
-                zIndex={900}
-                overlayProps={{ radius: 'sm', blur: 2 }}
-              />
-              <Button
-                onClick={handleAddMovie}
-                leftSection={<FiPlusCircle size={16} />}
-                color="dark"
-                variant="white"
-                radius="xl"
-              >
-                Add New Movie
-              </Button>
-            </div>
+            <Group gap="xs">
+              <AdminLogoutButton />
+              <div style={{ position: 'relative' }}>
+                <LoadingOverlay
+                  visible={loadingActions.add}
+                  zIndex={900}
+                  overlayProps={{ radius: 'sm', blur: 2 }}
+                />
+                <Button
+                  onClick={handleAddMovie}
+                  leftSection={<FiPlusCircle size={16} />}
+                  color="dark"
+                  variant="white"
+                  radius="xl"
+                >
+                  Add New Movie
+                </Button>
+              </div>
+            </Group>
           </Group>
 
           <SimpleGrid cols={{ base: 1, sm: 3 }} className={styles.statsGrid}>
