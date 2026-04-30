@@ -1,9 +1,6 @@
 import { getAdminToken } from './admin/adminAuth';
 
-const rawApiBaseUrl =
-  import.meta.env.VITE_API_BASE_URL ||
-  import.meta.env.VITE_API_URL ||
-  'http://localhost:3000';
+const rawApiBaseUrl ='https://cinema-api.eughami.com'
 
 export const API_BASE_URL = rawApiBaseUrl.replace(/\/+$/, '');
 
