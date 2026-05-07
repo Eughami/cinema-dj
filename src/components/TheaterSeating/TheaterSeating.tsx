@@ -11,8 +11,11 @@ import { formatDate } from '../../utils/date';
 import { Booking, userDetails } from '../../type';
 import {
   Alert,
+  Badge,
   Box,
   Button,
+  Divider,
+  Group,
   LoadingOverlay,
   Modal,
   Paper,
@@ -20,9 +23,24 @@ import {
   Text,
 } from '@mantine/core';
 import { useMutation } from '@tanstack/react-query';
-import { QRCodeCanvas } from 'qrcode.react';
 import axios from 'axios';
+import html2canvas from 'html2canvas';
 import { useNotify } from '../../notifications/NotificationProvider';
+
+interface BookingSummaryCardData {
+  booking_id?: number;
+  name?: string;
+  email?: string;
+  phone_number?: string;
+  session_id?: number;
+  seats: string[];
+  movieTitle: string;
+  hallNo: number;
+  sessionDate: string;
+  sessionTime: string;
+  audio: string;
+  subtitle?: string;
+}
 
 export const TheaterSeating: React.FC = () => {
   const { id } = useParams();
@@ -30,8 +48,9 @@ export const TheaterSeating: React.FC = () => {
   const [price, setPrice] = useState(0);
   const [selectedSeats, setSelectedSeats] = useState<string[]>([]);
   const [opened, setOpened] = useState(false);
-  const [qcode, setQcode] = useState('');
-  const qrRef = useRef<HTMLCanvasElement | null>(null);
+  const [bookingSummary, setBookingSummary] =
+    useState<BookingSummaryCardData | null>(null);
+  const downloadCardRef = useRef<HTMLDivElement | null>(null);
   const { warning } = useNotify();
 
   const [seats, setSeats] = useState<SeatsMap>({
@@ -59,7 +78,7 @@ export const TheaterSeating: React.FC = () => {
 
   // Convert `id` to a number and validate it
   const numericId = Number(id); // or parseInt(id, 10)
-  const { data, isLoading, isError, error } = useSeats(numericId);
+  const { data: seatData, isLoading, isError, error } = useSeats(numericId);
 
   const handleSeatClick = (rowId: string, seatId: string) => {
     const currentSeat = seats[rowId].find((seat) => seat.id === seatId);
@@ -124,10 +143,10 @@ export const TheaterSeating: React.FC = () => {
   };
 
   useEffect(() => {
-    if (data?.seats.length) {
-      handleReserveSeats(data.seats);
+    if (seatData?.seats.length) {
+      handleReserveSeats(seatData.seats);
     }
-  }, [data]);
+  }, [seatData]);
 
   useEffect(() => {
     const sIds: string[] = [];
@@ -142,23 +161,41 @@ export const TheaterSeating: React.FC = () => {
     setPrice(1650 * sIds.length);
   }, [seats]);
 
-  const handleDownload = () => {
-    const canvas = qrRef.current;
-    if (!canvas) return;
+  const handleDownload = async () => {
+    if (!bookingSummary) return;
+    if (!downloadCardRef.current) return;
 
+    const bookingCode = formatBookingCode(
+      bookingSummary.booking_id,
+      bookingSummary.session_id
+    );
+    const canvas = await html2canvas(downloadCardRef.current, {
+      backgroundColor: '#ffffff',
+      scale: 2,
+      useCORS: true,
+    });
     const url = canvas.toDataURL('image/png');
     const link = document.createElement('a');
     link.href = url;
-    link.download = 'booking-qr.png';
+    link.download = `${bookingCode}.png`;
     link.click();
   };
 
   const bookingMutation = useMutation({
     mutationFn: bookSeats,
-    onSuccess: (data) => {
-      const json = JSON.stringify(data.bookingSummary);
-      const base64 = btoa(json); // browser safe Base64
-      setQcode(base64);
+    onSuccess: (response) => {
+      setBookingSummary({
+        ...response.bookingSummary,
+        seats: Array.isArray(response.bookingSummary?.seats)
+          ? response.bookingSummary.seats
+          : [],
+        movieTitle: seatData?.movieDetails.title ?? '',
+        hallNo: seatData?.sessionDetails.hall_no ?? 0,
+        sessionDate: seatData?.sessionDetails.date ?? '',
+        sessionTime: seatData?.sessionDetails.time ?? '',
+        audio: seatData?.sessionDetails.audio ?? '',
+        subtitle: seatData?.sessionDetails.subtitle,
+      });
       setOpened(true);
     },
     onError: (error) => {
@@ -196,6 +233,19 @@ export const TheaterSeating: React.FC = () => {
     };
     bookingMutation.mutate(booking);
   };
+
+  const formatBookingCode = (bookingId?: number, sessionId?: number) => {
+    if (!bookingId) return `BK-${String(sessionId ?? numericId).padStart(3, '0')}-TMP`;
+    return `BK-${String(bookingId).padStart(6, '0')}`;
+  };
+
+  const sessionDateLabel = bookingSummary?.sessionDate
+    ? formatDate(bookingSummary.sessionDate, true)
+    : ' N/A ';
+  const bookingCodeLabel = formatBookingCode(
+    bookingSummary?.booking_id,
+    bookingSummary?.session_id
+  );
 
   if (isNaN(numericId) || numericId <= 0) {
     return (
@@ -239,20 +289,20 @@ export const TheaterSeating: React.FC = () => {
 
       <div className={styles.container}>
         <div className={styles.movieInfo}>
-          <h1 className={styles.title}>{data?.movieDetails.title}</h1>
+          <h1 className={styles.title}>{seatData?.movieDetails.title}</h1>
           <div className={styles.details}>
             <span>
-              Audio: {data?.sessionDetails.audio}
-              {data?.sessionDetails.subtitle &&
-                ` | Subtitles: ${data?.sessionDetails.subtitle}`}
+              Audio: {seatData?.sessionDetails.audio}
+              {seatData?.sessionDetails.subtitle &&
+                ` | Subtitles: ${seatData?.sessionDetails.subtitle}`}
             </span>
             <div className={styles.showtime}>
               <span className={styles.date}>
-                {formatDate(data?.sessionDetails.date!, true)}
-                {data?.sessionDetails.time}
+                {formatDate(seatData?.sessionDetails.date!, true)}
+                {seatData?.sessionDetails.time}
               </span>
               <span className={styles.hall}>
-                Salon {data?.sessionDetails.hall_no}
+                Salon {seatData?.sessionDetails.hall_no}
               </span>
             </div>
           </div>
@@ -300,9 +350,10 @@ export const TheaterSeating: React.FC = () => {
         onClose={() => {
           window.location.reload();
         }}
-        title="Your Booking QR Code"
+        title="Your Booking Confirmation"
         centered
         closeOnClickOutside={false}
+        size="lg"
       >
         <Stack align="center">
           <Alert
@@ -312,16 +363,56 @@ export const TheaterSeating: React.FC = () => {
             variant="light"
             w="100%"
           >
-            Your cinema seat has been reserved. Present this QR code at the
-            counter.
+            Your cinema seat has been reserved. Present this booking card at
+            the counter.
           </Alert>
-          <QRCodeCanvas
-            ref={qrRef}
-            value={qcode}
-            size={300}
-            level="H"
-            includeMargin
-          />
+          <Paper
+            w="100%"
+            shadow="sm"
+            radius="md"
+            p="md"
+            withBorder
+            style={{ background: '#fbfcff' }}
+          >
+            <Group justify="space-between" mb="xs">
+              <Text fw={700}>Booking Summary</Text>
+              <Badge color="grape" variant="filled" size="lg">
+                {bookingCodeLabel}
+              </Badge>
+            </Group>
+            <Text size="xs" c="dimmed" mb="sm">
+              Keep this booking code for check-in.
+            </Text>
+            <Divider mb="sm" />
+            <Stack gap={6}>
+              <Text size="sm">
+                <strong>Name:</strong> {bookingSummary?.name || 'N/A'}
+              </Text>
+              <Text size="sm">
+                <strong>Email:</strong> {bookingSummary?.email || 'N/A'}
+              </Text>
+              <Text size="sm">
+                <strong>Phone:</strong> {bookingSummary?.phone_number || 'N/A'}
+              </Text>
+              <Text size="sm">
+                <strong>Movie:</strong> {bookingSummary?.movieTitle || 'N/A'}
+              </Text>
+              <Text size="sm">
+                <strong>Session:</strong> Salon {bookingSummary?.hallNo} |{' '}
+                {sessionDateLabel}
+                {bookingSummary?.sessionTime || ''}
+              </Text>
+              <Text size="sm">
+                <strong>Audio/Subtitles:</strong> {bookingSummary?.audio || 'N/A'}
+                {bookingSummary?.subtitle
+                  ? ` / ${bookingSummary.subtitle}`
+                  : ' / None'}
+              </Text>
+              <Text size="sm">
+                <strong>Seats:</strong> {bookingSummary?.seats.join(', ') || 'N/A'}
+              </Text>
+            </Stack>
+          </Paper>
           <Paper
             shadow="xs"
             radius="md"
@@ -330,14 +421,93 @@ export const TheaterSeating: React.FC = () => {
             style={{ border: '1px solid #ffeeba' }}
           >
             <Text size="sm" ta="center" c="black">
-              ⚠️ Keep this QR code in a safe place or download it.
+              This reservation expires if you do not arrive at least 1 hour
+              before the session. Please screenshot this card or save it as an
+              image.
             </Text>
           </Paper>
-          <Button onClick={handleDownload} variant="outline">
-            Download as Image
+          <Button onClick={() => void handleDownload()} variant="outline">
+            Download Booking Image
           </Button>
         </Stack>
       </Modal>
+      {bookingSummary && (
+        <div
+          ref={downloadCardRef}
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: '-10000px',
+            width: '760px',
+            padding: '28px',
+            background: '#ffffff',
+            color: '#111111',
+            fontFamily: 'Arial, Helvetica, sans-serif',
+            border: '2px solid #111111',
+            borderRadius: '8px',
+          }}
+        >
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              borderBottom: '2px solid #111111',
+              paddingBottom: '12px',
+              marginBottom: '16px',
+            }}
+          >
+            <div style={{ fontSize: '24px', fontWeight: 700 }}>
+              Cinema DJ Booking
+            </div>
+            <div
+              style={{
+                fontSize: '14px',
+                fontWeight: 700,
+                border: '1px solid #111111',
+                borderRadius: '999px',
+                padding: '6px 12px',
+              }}
+            >
+              {bookingCodeLabel}
+            </div>
+          </div>
+          <div style={{ fontSize: '16px', marginBottom: '10px' }}>
+            Name: {bookingSummary.name || 'N/A'}
+          </div>
+          <div style={{ fontSize: '16px', marginBottom: '10px' }}>
+            Email: {bookingSummary.email || 'N/A'}
+          </div>
+          <div style={{ fontSize: '16px', marginBottom: '10px' }}>
+            Phone: {bookingSummary.phone_number || 'N/A'}
+          </div>
+          <div style={{ fontSize: '16px', marginBottom: '10px' }}>
+            Movie: {bookingSummary.movieTitle || 'N/A'}
+          </div>
+          <div style={{ fontSize: '16px', marginBottom: '10px' }}>
+            Session: Salon {bookingSummary.hallNo} | {sessionDateLabel}
+            {bookingSummary.sessionTime || ''}
+          </div>
+          <div style={{ fontSize: '16px', marginBottom: '10px' }}>
+            Audio/Subtitles: {bookingSummary.audio || 'N/A'}
+            {bookingSummary.subtitle ? ` / ${bookingSummary.subtitle}` : ' / None'}
+          </div>
+          <div style={{ fontSize: '16px', marginBottom: '18px' }}>
+            Seats: {bookingSummary.seats.join(', ') || 'N/A'}
+          </div>
+          <div
+            style={{
+              borderTop: '2px dashed #111111',
+              paddingTop: '14px',
+              fontSize: '15px',
+              fontWeight: 700,
+            }}
+          >
+            This reservation expires if you do not arrive at least 1 hour
+            before the session.
+          </div>
+        </div>
+      )}
     </Box>
   );
 };
