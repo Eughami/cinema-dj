@@ -9,8 +9,26 @@ import {
 } from '@mantine/core';
 import axios from 'axios';
 import { DateInput } from '@mantine/dates';
+import { getAdminRequestConfig, toApiUrl, toAssetUrl } from '../config';
 
-const AddMovie = ({ movie, onClose }: { movie?: any; onClose: () => void }) => {
+interface EditableMovie {
+  id: number;
+  title?: string;
+  duration?: number;
+  genre?: string;
+  actors?: string;
+  release_date?: string;
+  image?: string;
+  wide_image?: string | null;
+  description?: string;
+}
+
+interface AddMovieProps {
+  movie?: EditableMovie | null;
+  onClose: () => void;
+}
+
+const AddMovie = ({ movie, onClose }: AddMovieProps) => {
   const [title, setTitle] = useState(movie?.title || '');
   const [duration, setDuration] = useState(movie?.duration || 0);
   const [genre, setGenre] = useState(movie?.genre || '');
@@ -28,12 +46,10 @@ const AddMovie = ({ movie, onClose }: { movie?: any; onClose: () => void }) => {
 
   // Preview URLs for selected files
   const [imagePreview, setImagePreview] = useState<string | null>(
-    defaultImageUrl ? 'https://cinema-api.eughami.com/' + defaultImageUrl : null
+    defaultImageUrl ? toAssetUrl(defaultImageUrl) : null
   );
   const [wideImagePreview, setWideImagePreview] = useState<string | null>(
-    defaultWideImageUrl
-      ? 'https://cinema-api.eughami.com/' + defaultWideImageUrl
-      : null
+    defaultWideImageUrl ? toAssetUrl(defaultWideImageUrl) : null
   );
 
   const handleImageChange = (file: File | null) => {
@@ -42,7 +58,7 @@ const AddMovie = ({ movie, onClose }: { movie?: any; onClose: () => void }) => {
       const previewUrl = URL.createObjectURL(file);
       setImagePreview(previewUrl);
     } else {
-      setImagePreview(defaultImageUrl); // Fallback to default URL if no file is selected
+      setImagePreview(defaultImageUrl ? toAssetUrl(defaultImageUrl) : null);
     }
   };
 
@@ -52,7 +68,9 @@ const AddMovie = ({ movie, onClose }: { movie?: any; onClose: () => void }) => {
       const previewUrl = URL.createObjectURL(file);
       setWideImagePreview(previewUrl);
     } else {
-      setWideImagePreview(defaultWideImageUrl); // Fallback to default URL if no file is selected
+      setWideImagePreview(
+        defaultWideImageUrl ? toAssetUrl(defaultWideImageUrl) : null
+      );
     }
   };
 
@@ -71,26 +89,17 @@ const AddMovie = ({ movie, onClose }: { movie?: any; onClose: () => void }) => {
     if (wideImage) formData.append('wide_image', wideImage);
 
     try {
+      const adminRequestConfig = getAdminRequestConfig();
+      const requestConfig = {
+        headers: {
+          ...(adminRequestConfig.headers || {}),
+        },
+      };
+
       if (movie) {
-        await axios.put(
-          `https://cinema-api.eughami.com/admin/movies/${movie.id}`,
-          formData,
-          {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-            },
-          }
-        );
+        await axios.put(toApiUrl(`/admin/movies/${movie.id}`), formData, requestConfig);
       } else {
-        await axios.post(
-          'https://cinema-api.eughami.com/admin/movies',
-          formData,
-          {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-            },
-          }
-        );
+        await axios.post(toApiUrl('/admin/movies'), formData, requestConfig);
       }
       onClose();
     } catch (error) {
@@ -114,7 +123,7 @@ const AddMovie = ({ movie, onClose }: { movie?: any; onClose: () => void }) => {
           <NumberInput
             label="Duration (minutes)"
             value={duration}
-            onChange={(value) => setDuration(value || 0)}
+            onChange={(value) => setDuration(Number(value) || 0)}
             required
           />
         </Grid.Col>

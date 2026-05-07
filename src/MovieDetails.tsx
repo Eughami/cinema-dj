@@ -21,6 +21,8 @@ import { CiEdit } from 'react-icons/ci';
 import { FaEye, FaRegTrashAlt } from 'react-icons/fa';
 import { FiArrowLeft, FiCalendar } from 'react-icons/fi';
 import styles from './admin/AdminRoutes.module.css';
+import { getAdminRequestConfig, toApiUrl, toAssetUrl } from './config';
+import AdminLogoutButton from './admin/AdminLogoutButton';
 
 interface MovieDetailsData {
   id: number;
@@ -66,9 +68,7 @@ const MovieDetails = (): JSX.Element => {
 
   const fetchMovieDetails = async () => {
     try {
-      const response = await axios.get(
-        `https://cinema-api.eughami.com/movies/${id}`
-      );
+      const response = await axios.get(toApiUrl(`/movies/${id}`));
       setMovie(response.data);
     } catch (error) {
       console.error('Failed to fetch movie details:', error);
@@ -77,9 +77,7 @@ const MovieDetails = (): JSX.Element => {
 
   const fetchSessions = async () => {
     try {
-      const response = await axios.get(
-        `https://cinema-api.eughami.com/movies/${id}/sessions`
-      );
+      const response = await axios.get(toApiUrl(`/movies/${id}/sessions`));
       setSessions(response.data);
     } catch (error) {
       console.error('Failed to fetch sessions:', error);
@@ -91,7 +89,8 @@ const MovieDetails = (): JSX.Element => {
       setLoadingActions((prev) => ({ ...prev, delete: true }));
       try {
         await axios.delete(
-          `https://cinema-api.eughami.com/admin/sessions/${sessionId}`
+          toApiUrl(`/admin/sessions/${sessionId}`),
+          getAdminRequestConfig()
         );
         fetchSessions();
       } catch (error) {
@@ -138,6 +137,7 @@ const MovieDetails = (): JSX.Element => {
               </Text>
             </div>
             <Group gap="xs">
+              <AdminLogoutButton />
               <Button
                 variant="white"
                 color="dark"
@@ -195,7 +195,7 @@ const MovieDetails = (): JSX.Element => {
           <div className={styles.panelHeader}>
             <div className={styles.movieHeader}>
               <Image
-                src={`https://cinema-api.eughami.com/${movie.image}`}
+                src={toAssetUrl(movie.image)}
                 alt={movie.title}
                 className={styles.moviePoster}
               />

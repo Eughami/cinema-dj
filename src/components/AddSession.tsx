@@ -15,6 +15,7 @@ import {
 import { DateInput } from '@mantine/dates';
 import axios from 'axios';
 import { FiCalendar, FiInfo } from 'react-icons/fi';
+import { getAdminRequestConfig, toApiUrl } from '../config';
 
 type SessionFormData = {
   id: number;
@@ -111,19 +112,24 @@ const AddSession = (props: Iprops): JSX.Element => {
         }
 
         await axios.put(
-          `https://cinema-api.eughami.com/admin/sessions/${session.id}`,
+          toApiUrl(`/admin/sessions/${session.id}`),
           {
             ...basePayload,
             date: toIsoDate(date),
-          }
+          },
+          getAdminRequestConfig()
         );
         onSuccess();
       } else {
         const createRequests = selectedDates.map((selectedDate) =>
-          axios.post('https://cinema-api.eughami.com/admin/sessions', {
-            ...basePayload,
-            date: selectedDate,
-          })
+          axios.post(
+            toApiUrl('/admin/sessions'),
+            {
+              ...basePayload,
+              date: selectedDate,
+            },
+            getAdminRequestConfig()
+          )
         );
 
         const results = await Promise.allSettled(createRequests);

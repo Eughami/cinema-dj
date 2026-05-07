@@ -20,6 +20,8 @@ import { FaRegTrashAlt, FaEye } from 'react-icons/fa';
 import { FiFilm, FiPlusCircle } from 'react-icons/fi';
 import { useNavigate } from 'react-router';
 import styles from './admin/AdminRoutes.module.css';
+import { getAdminRequestConfig, toApiUrl, toAssetUrl } from './config';
+import AdminLogoutButton from './admin/AdminLogoutButton';
 
 interface AdminMovie {
   id: number;
@@ -52,7 +54,7 @@ const AdminMovieList = (): JSX.Element => {
 
   const fetchMovies = async () => {
     try {
-      const response = await axios.get('https://cinema-api.eughami.com/movies');
+      const response = await axios.get(toApiUrl('/movies'));
       setMovies(response.data);
     } catch (error) {
       console.error('Failed to fetch movies:', error);
@@ -78,7 +80,10 @@ const AdminMovieList = (): JSX.Element => {
     if (window.confirm('Are you sure you want to delete this movie?')) {
       setLoadingActions((prev) => ({ ...prev, delete: true }));
       try {
-        await axios.delete(`https://cinema-api.eughami.com/admin/movies/${id}`);
+        await axios.delete(
+          toApiUrl(`/admin/movies/${id}`),
+          getAdminRequestConfig()
+        );
         fetchMovies();
       } catch (error) {
         console.error('Failed to delete movie:', error);
@@ -123,22 +128,25 @@ const AdminMovieList = (): JSX.Element => {
                 to session planning.
               </Text>
             </div>
-            <div style={{ position: 'relative' }}>
-              <LoadingOverlay
-                visible={loadingActions.add}
-                zIndex={900}
-                overlayProps={{ radius: 'sm', blur: 2 }}
-              />
-              <Button
-                onClick={handleAddMovie}
-                leftSection={<FiPlusCircle size={16} />}
-                color="dark"
-                variant="white"
-                radius="xl"
-              >
-                Add New Movie
-              </Button>
-            </div>
+            <Group gap="xs">
+              <AdminLogoutButton />
+              <div style={{ position: 'relative' }}>
+                <LoadingOverlay
+                  visible={loadingActions.add}
+                  zIndex={900}
+                  overlayProps={{ radius: 'sm', blur: 2 }}
+                />
+                <Button
+                  onClick={handleAddMovie}
+                  leftSection={<FiPlusCircle size={16} />}
+                  color="dark"
+                  variant="white"
+                  radius="xl"
+                >
+                  Add New Movie
+                </Button>
+              </div>
+            </Group>
           </Group>
 
           <SimpleGrid cols={{ base: 1, sm: 3 }} className={styles.statsGrid}>
@@ -203,7 +211,7 @@ const AdminMovieList = (): JSX.Element => {
                     <Table.Tr key={movie.id} className={styles.tableRow}>
                       <Table.Td>
                         <img
-                          src={`https://cinema-api.eughami.com/${movie.image}`}
+                          src={toAssetUrl(movie.image)}
                           alt={`${movie.title} poster`}
                           className={styles.posterThumb}
                         />

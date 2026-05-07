@@ -1,18 +1,18 @@
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { Movie } from '../type';
+import { toApiUrl } from '../config';
 
 const fetchMovie = async (id: number) => {
-  const response = await axios.get(
-    `https://cinema-api.eughami.com/movies/${id}`
-  );
+  const response = await axios.get(toApiUrl(`/movies/${id}`));
   return response.data as Movie;
 };
 
 const useMovie = (id: number) => {
   return useQuery({
-    queryKey: ['movie'], // Unique key for the query
-    queryFn: () => fetchMovie(id), // Function to fetch data
+    queryKey: ['movie', id],
+    queryFn: () => fetchMovie(id),
+    enabled: Number.isInteger(id) && id > 0,
   });
 };
 

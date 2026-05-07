@@ -74,3 +74,28 @@
     margin: 0;
   }
 }
+
+.movieInfoCol {
+  order: 1;
+}
+
+.sessionsCol {
+  order: 2;
+}
+
+@media (max-width: $mantine-breakpoint-sm) {
+  .movieInfoCol {
+    order: 2;
+  }
+
+  .sessionsCol {
+    order: 1;
+  }
+}
+
+.noSessionText {
+  text-align: center;
+}
+.sessionContainer{
+  min-height: 100px;
+}

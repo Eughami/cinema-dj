@@ -2,12 +2,12 @@ export interface Movie {
   id: number;
   image: string;
   title: string;
-  wide_image: string;
+  wide_image?: string | null;
   release_date: string;
-  genre: string;
+  genre?: string;
   description: string;
-  duration: string;
-  actor: string;
+  duration: number;
+  actors?: string;
 }
 
 export interface Session {

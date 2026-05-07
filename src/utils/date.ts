@@ -27,11 +27,13 @@ export const formatDate = (dateString: string, noD = false) => {
     'Friday',
     'Saturday',
   ];
-  if (noD) return ` ${date} ${months[month]} ${year}`;
-  return ` ${days[day]} ${date} ${months[month]} ${year}`;
+  if (noD) return ` ${date} ${months[month]} ${year} `;
+  return ` ${days[day]} ${date} ${months[month]} ${year} `;
 };
 
 export const parseDateFR = (dateString: string) => {
   const [day, month, year] = dateString.split('/');
-  return `${year}-${month}-${day}`;
+  const paddedDay = day.padStart(2, '0');
+  const paddedMonth = month.padStart(2, '0');
+  return `${year}-${paddedMonth}-${paddedDay}`;
 };

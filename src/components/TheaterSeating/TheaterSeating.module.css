@@ -66,6 +66,10 @@
   margin-top: 2rem;
 }
 
+.seatingScroll {
+  width: 100%;
+}
+
 .row {
   display: flex;
   align-items: center;
@@ -113,10 +117,25 @@
     height: 40px;
   }
 
-  .seatGrid {
-    display: grid;
-    grid-template-columns: repeat(10, 1fr);
-    gap: 2px;
+  .seatingScroll {
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 0.5rem;
+  }
+
+  .seatingArea {
+    width: max-content;
+    min-width: 100%;
+    margin-top: 1.5rem;
+  }
+
+  .row {
+    width: max-content;
+  }
+
+  .seats {
+    flex-grow: 0;
   }
 
   .seat {

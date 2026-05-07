@@ -12,6 +12,8 @@ import {
 import { FiArrowLeft, FiUsers } from 'react-icons/fi';
 import axios from 'axios';
 import styles from './admin/AdminRoutes.module.css';
+import { getAdminRequestConfig, toApiUrl } from './config';
+import AdminLogoutButton from './admin/AdminLogoutButton';
 
 interface SessionData {
   id: number;
@@ -71,7 +73,8 @@ const AdminSessionDetails = (): JSX.Element => {
 
       try {
         const response = await axios.get<SessionDetailsResponse>(
-          `https://cinema-api.eughami.com/admin/sessions/${sessionId}/details`
+          toApiUrl(`/admin/sessions/${sessionId}/details`),
+          getAdminRequestConfig()
         );
         setData(response.data);
       } catch (fetchError) {
@@ -167,15 +170,18 @@ const AdminSessionDetails = (): JSX.Element => {
                 {data.session.subtitle ? ` | Subtitle: ${data.session.subtitle}` : ''}
               </Text>
             </div>
-            <Button
-              variant="white"
-              color="dark"
-              radius="xl"
-              leftSection={<FiArrowLeft size={14} />}
-              onClick={() => navigate(`/admin/movie/${data.movie.id}`)}
-            >
-              Back to Sessions
-            </Button>
+            <Group gap="xs">
+              <AdminLogoutButton />
+              <Button
+                variant="white"
+                color="dark"
+                radius="xl"
+                leftSection={<FiArrowLeft size={14} />}
+                onClick={() => navigate(`/admin/movie/${data.movie.id}`)}
+              >
+                Back to Sessions
+              </Button>
+            </Group>
           </Group>
 
           <SimpleGrid cols={{ base: 1, sm: 3 }} className={styles.statsGrid}>

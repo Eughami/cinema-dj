@@ -79,7 +79,7 @@ const ReservationForm = (props: IReservationFormProps) => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <Grid className={styles.formContainer} cols={{ base: 12, sm: 12, md: 12 }}>
+      <Grid className={styles.formContainer}>
         <Grid.Col span={{ base: 12, sm: 12 }} className={styles.formSection}>
           <input
             type="email"
