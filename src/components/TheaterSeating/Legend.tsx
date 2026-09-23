@@ -6,15 +6,15 @@ export const Legend: React.FC = () => {
     <div className={styles.legend}>
       <div className={styles.legendItem}>
         <div className={`${styles.legendSeat} ${styles.available}`} />
-        <span>Available</span>
+        <span>Disponible</span>
       </div>
       <div className={styles.legendItem}>
         <div className={`${styles.legendSeat} ${styles.selected}`} />
-        <span>Selected</span>
+        <span>Sélectionné</span>
       </div>
       <div className={styles.legendItem}>
         <div className={`${styles.legendSeat} ${styles.reserved}`} />
-        <span>Reserved</span>
+        <span>Réservé</span>
       </div>
     </div>
   );

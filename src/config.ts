@@ -1,6 +1,7 @@
 import { getAdminToken } from './admin/adminAuth';
 
-const rawApiBaseUrl ='https://cinema-api.eughami.com'
+// const rawApiBaseUrl ='https://cinema-api.eughami.com'
+const rawApiBaseUrl ='http://localhost:3000'
 
 export const API_BASE_URL = rawApiBaseUrl.replace(/\/+$/, '');
 

@@ -21,7 +21,7 @@ import { toAssetUrl } from './config';
 
 const Movie = () => {
   const [selectedDate, setSelectedDate] = useState<string>(
-    new Date().toLocaleDateString('FR-fr')
+    new Date().toLocaleDateString('fr-FR')
   );
   const [dateSession, setDateSession] = useState<Session[]>([]);
   const { id } = useParams();
@@ -31,9 +31,9 @@ const Movie = () => {
   if (isNaN(numericId) || numericId <= 0) {
     return (
       <div>
-        <h1>404 - Page Not Found</h1>
-        <p>The movie ID is invalid or not provided.</p>
-        <button onClick={() => navigate('/')}>Back to Home</button>
+        <h1>404 - Page non trouvée</h1>
+        <p>L'identifiant du film est invalide ou non fourni.</p>
+        <button onClick={() => navigate('/')}>Retour à l'accueil</button>
       </div>
     );
   }
@@ -64,7 +64,7 @@ const Movie = () => {
     );
   }
   if (isError || isE) {
-    return <div>Error: {error?.message || sE?.message}</div>;
+    return <div>Erreur : {error?.message || sE?.message}</div>;
   }
 
   return (
@@ -77,12 +77,12 @@ const Movie = () => {
               h={300}
               w={250}
               src={toAssetUrl(movie?.image)}
-              alt="movie poster"
+              alt="affiche du film"
             />
-            <MovieProperty label="Release Date" value={movie!.release_date} />
+            <MovieProperty label="Date de sortie" value={movie!.release_date} />
             <MovieProperty label="Genre" value={movie!.genre || ''} />
-            <MovieProperty label="Duration" value={`${movie!.duration} min`} />
-            <MovieProperty label="Actors" value={movie!.actors || ''} />
+            <MovieProperty label="Durée" value={`${movie!.duration} min`} />
+            <MovieProperty label="Acteurs" value={movie!.actors || ''} />
             <Button
               variant="filled"
               color="#f5efdf"
@@ -91,7 +91,7 @@ const Movie = () => {
                 label: classes.label,
               }}
             >
-              Watch Trailer
+              Voir la bande-annonce
             </Button>
           </Grid.Col>
           <Grid.Col span={{ base: 12, sm: 'auto' }} className={classes.sessionsCol}>
@@ -106,7 +106,7 @@ const Movie = () => {
                 <img
                   className={classes.calendarIcon}
                   src="/calendar-icon.svg"
-                  alt="calendar"
+                  alt="calendrier"
                 />
                 <span className={classes.today}>
                   {formatDate(parseDateFR(selectedDate))}
@@ -117,11 +117,11 @@ const Movie = () => {
                   classNames={{
                     input: classes.selectRoot,
                   }}
-                  placeholder="Select another date ..."
+                  placeholder="Choisir une autre date ..."
                   data={Array.from({ length: 6 }, (_, i) => {
                     const date = new Date();
                     date.setDate(date.getDate() + i);
-                    const dd = date.toLocaleDateString('FR-fr');
+                    const dd = date.toLocaleDateString('fr-FR');
                     return {
                       value: dd,
                       label: formatDate(parseDateFR(dd)),
@@ -138,7 +138,7 @@ const Movie = () => {
               dateSession.map((s) => <MovieTime s={s} key={s.id} />)
             ) : (
               <Text className={classes.noSessionText} p="xl">
-                No Session for the selected Date.
+                Aucune séance pour la date sélectionnée.
               </Text>
             )}
             </div>

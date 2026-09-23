@@ -13,8 +13,8 @@ const MovieTime = (props: MovieTimeProps) => {
       <div className={classes.mtHour}>{s.time}</div>
       <div className={classes.mtHall}>Salle {s.hall_no}</div>
       <div className={classes.mtLang}>
-        <span>Audio: {s.audio}</span>
-        <span>{s.subtitle && `Sub: ${s.subtitle}`}</span>
+        <span>Audio : {s.audio}</span>
+        <span>{s.subtitle && `Sous-titres : ${s.subtitle}`}</span>
       </div>
       <Button
         size="md"
@@ -29,7 +29,7 @@ const MovieTime = (props: MovieTimeProps) => {
         variant="outline"
         color="#620D8A"
       >
-        Buy ticket
+        Acheter un billet
       </Button>
     </div>
   );

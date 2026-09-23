@@ -8,7 +8,7 @@ interface AdminLogoutButtonProps {
 }
 
 const AdminLogoutButton = ({
-  label = 'Logout',
+  label = 'Déconnexion',
 }: AdminLogoutButtonProps): JSX.Element => {
   const navigate = useNavigate();
 

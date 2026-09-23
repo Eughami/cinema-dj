@@ -103,7 +103,7 @@ const AddMovie = ({ movie, onClose }: AddMovieProps) => {
       }
       onClose();
     } catch (error) {
-      alert('Failed to save movie');
+      alert("Échec de l'enregistrement du film");
       console.error(error);
     }
   };
@@ -113,7 +113,7 @@ const AddMovie = ({ movie, onClose }: AddMovieProps) => {
       <Grid>
         <Grid.Col span={6}>
           <TextInput
-            label="Title"
+            label="Titre"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             required
@@ -121,7 +121,7 @@ const AddMovie = ({ movie, onClose }: AddMovieProps) => {
         </Grid.Col>
         <Grid.Col span={6}>
           <NumberInput
-            label="Duration (minutes)"
+            label="Durée (minutes)"
             value={duration}
             onChange={(value) => setDuration(Number(value) || 0)}
             required
@@ -136,7 +136,7 @@ const AddMovie = ({ movie, onClose }: AddMovieProps) => {
         </Grid.Col>
         <Grid.Col span={6}>
           <TextInput
-            label="Actors"
+            label="Acteurs"
             value={actors}
             onChange={(e) => setActors(e.target.value)}
           />
@@ -145,8 +145,8 @@ const AddMovie = ({ movie, onClose }: AddMovieProps) => {
           <DateInput
             value={releaseDate}
             onChange={setReleaseDate}
-            label="Release Date"
-            placeholder="Release Date"
+            label="Date de sortie"
+            placeholder="Date de sortie"
             required
           />
         </Grid.Col>
@@ -160,21 +160,21 @@ const AddMovie = ({ movie, onClose }: AddMovieProps) => {
           {imagePreview && (
             <img
               src={imagePreview}
-              alt="Image Preview"
+              alt="Aperçu de l'image"
               style={{ marginTop: '10px', maxWidth: 'auto', height: 100 }}
             />
           )}
         </Grid.Col>
         <Grid.Col span={6}>
           <FileInput
-            label="Wide Image"
+            label="Image large"
             accept="image/*"
             onChange={handleWideImageChange}
           />
           {wideImagePreview && (
             <img
               src={wideImagePreview}
-              alt="Wide Image Preview"
+              alt="Aperçu de l'image large"
               style={{ marginTop: '10px', maxWidth: 'auto', height: 100 }}
             />
           )}
@@ -189,7 +189,7 @@ const AddMovie = ({ movie, onClose }: AddMovieProps) => {
           />
         </Grid.Col>
         <Grid.Col span={12}>
-          <Button type="submit">Save Movie</Button>
+          <Button type="submit">Enregistrer le film</Button>
         </Grid.Col>
       </Grid>
     </form>

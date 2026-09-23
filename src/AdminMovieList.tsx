@@ -57,7 +57,7 @@ const AdminMovieList = (): JSX.Element => {
       const response = await axios.get(toApiUrl('/movies'));
       setMovies(response.data);
     } catch (error) {
-      console.error('Failed to fetch movies:', error);
+      console.error('Échec de la récupération des films :', error);
     }
   };
 
@@ -77,7 +77,7 @@ const AdminMovieList = (): JSX.Element => {
   );
 
   const handleDelete = async (id: number) => {
-    if (window.confirm('Are you sure you want to delete this movie?')) {
+    if (window.confirm('Êtes-vous sûr de vouloir supprimer ce film ?')) {
       setLoadingActions((prev) => ({ ...prev, delete: true }));
       try {
         await axios.delete(
@@ -86,7 +86,7 @@ const AdminMovieList = (): JSX.Element => {
         );
         fetchMovies();
       } catch (error) {
-        console.error('Failed to delete movie:', error);
+        console.error('Échec de la suppression du film :', error);
       } finally {
         setLoadingActions((prev) => ({ ...prev, delete: false }));
       }
@@ -121,11 +121,11 @@ const AdminMovieList = (): JSX.Element => {
         <Paper className={styles.heroPanel}>
           <Group justify="space-between" align="flex-start" gap="sm">
             <div>
-              <Text className={styles.kicker}>Cinema DJ Administration</Text>
-              <Title order={2}>Movies Dashboard</Title>
+              <Text className={styles.kicker}>Administration Cinéma DJ</Text>
+              <Title order={2}>Tableau de bord des films</Title>
               <Text mt="xs" className={styles.heroHint}>
-                Manage your catalog, check publishing readiness, and jump directly
-                to session planning.
+                Gérez votre catalogue, vérifiez l'état de publication et accédez
+                directement à la planification des séances.
               </Text>
             </div>
             <Group gap="xs">
@@ -143,7 +143,7 @@ const AdminMovieList = (): JSX.Element => {
                   variant="white"
                   radius="xl"
                 >
-                  Add New Movie
+                  Ajouter un film
                 </Button>
               </div>
             </Group>
@@ -152,19 +152,19 @@ const AdminMovieList = (): JSX.Element => {
           <SimpleGrid cols={{ base: 1, sm: 3 }} className={styles.statsGrid}>
             <Paper className={styles.statCard}>
               <Text size="xs" fw={600} c="gray.2">
-                Total movies
+                Total des films
               </Text>
               <Title order={3}>{movies.length}</Title>
             </Paper>
             <Paper className={styles.statCard}>
               <Text size="xs" fw={600} c="gray.2">
-                Upcoming releases
+                Sorties à venir
               </Text>
               <Title order={3}>{upcomingMoviesCount}</Title>
             </Paper>
             <Paper className={styles.statCard}>
               <Text size="xs" fw={600} c="gray.2">
-                Runtime tracked
+                Durée totale suivie
               </Text>
               <Title order={3}>{totalRuntime} min</Title>
             </Paper>
@@ -176,10 +176,10 @@ const AdminMovieList = (): JSX.Element => {
             <Group justify="space-between">
               <Group gap="xs">
                 <FiFilm size={18} />
-                <Text fw={700}>All movies</Text>
+                <Text fw={700}>Tous les films</Text>
               </Group>
               <Badge radius="sm" color="cyan" variant="light">
-                {movies.length} items
+                {movies.length} films
               </Badge>
             </Group>
           </div>
@@ -189,11 +189,11 @@ const AdminMovieList = (): JSX.Element => {
               <Table highlightOnHover verticalSpacing="sm">
                 <Table.Thead>
                   <Table.Tr>
-                    <Table.Th>Poster</Table.Th>
-                    <Table.Th>Title</Table.Th>
+                    <Table.Th>Affiche</Table.Th>
+                    <Table.Th>Titre</Table.Th>
                     <Table.Th>Genre</Table.Th>
-                    <Table.Th>Duration</Table.Th>
-                    <Table.Th>Release Date</Table.Th>
+                    <Table.Th>Durée</Table.Th>
+                    <Table.Th>Date de sortie</Table.Th>
                     <Table.Th>Actions</Table.Th>
                   </Table.Tr>
                 </Table.Thead>
@@ -202,7 +202,7 @@ const AdminMovieList = (): JSX.Element => {
                     <Table.Tr>
                       <Table.Td colSpan={6}>
                         <Text c="dimmed" ta="center" py="md">
-                          No movies found.
+                          Aucun film trouvé.
                         </Text>
                       </Table.Td>
                     </Table.Tr>
@@ -212,7 +212,7 @@ const AdminMovieList = (): JSX.Element => {
                       <Table.Td>
                         <img
                           src={toAssetUrl(movie.image)}
-                          alt={`${movie.title} poster`}
+                          alt={`affiche de ${movie.title}`}
                           className={styles.posterThumb}
                         />
                       </Table.Td>
@@ -228,7 +228,7 @@ const AdminMovieList = (): JSX.Element => {
                       </Table.Td>
                       <Table.Td>
                         <Badge color="blue" variant="light" radius="sm">
-                          {movie.genre || 'N/A'}
+                          {movie.genre || 'N/D'}
                         </Badge>
                       </Table.Td>
                       <Table.Td>{movie.duration} min</Table.Td>
@@ -241,7 +241,7 @@ const AdminMovieList = (): JSX.Element => {
                             variant="light"
                             color="cyan"
                             onClick={() => openMovieDetails(movie.id)}
-                            aria-label="View movie sessions"
+                            aria-label="Voir les séances du film"
                           >
                             <FaEye size={14} />
                           </ActionIcon>
@@ -255,7 +255,7 @@ const AdminMovieList = (): JSX.Element => {
                               variant="light"
                               color="indigo"
                               onClick={() => handleEdit(movie)}
-                              aria-label="Edit movie"
+                              aria-label="Modifier le film"
                             >
                               <CiEdit size={17} />
                             </ActionIcon>
@@ -270,7 +270,7 @@ const AdminMovieList = (): JSX.Element => {
                               variant="light"
                               color="red"
                               onClick={() => handleDelete(movie.id)}
-                              aria-label="Delete movie"
+                              aria-label="Supprimer le film"
                             >
                               <FaRegTrashAlt size={13} />
                             </ActionIcon>
@@ -289,7 +289,7 @@ const AdminMovieList = (): JSX.Element => {
       <Drawer
         opened={drawerOpened}
         onClose={handleDrawerClose}
-        title={selectedMovie ? 'Edit Movie' : 'Add Movie'}
+        title={selectedMovie ? 'Modifier le film' : 'Ajouter un film'}
         padding="xl"
         size="xl"
       >

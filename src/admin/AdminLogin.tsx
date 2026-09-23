@@ -61,14 +61,14 @@ const AdminLogin = (): JSX.Element => {
 
       const token = response.data?.token?.trim();
       if (!token) {
-        setError('Login failed: no token returned by server');
+        setError('Échec de la connexion : aucun jeton retourné par le serveur');
         return;
       }
 
       setAdminToken(token);
       navigate(redirectPath, { replace: true });
     } catch (requestError: unknown) {
-      let errorMessage = 'Login failed';
+      let errorMessage = 'Échec de la connexion';
       if (axios.isAxiosError(requestError)) {
         const apiError = requestError.response?.data?.error;
         if (typeof apiError === 'string' && apiError.trim()) {
@@ -89,21 +89,21 @@ const AdminLogin = (): JSX.Element => {
           <form onSubmit={handleSubmit}>
             <Stack gap="md">
               <div>
-                <Text className={styles.kicker}>Cinema DJ Administration</Text>
-                <Title order={2}>Admin Login</Title>
+                <Text className={styles.kicker}>Administration Cinéma DJ</Text>
+                <Title order={2}>Connexion admin</Title>
                 <Text c="dimmed" mt="xs">
-                  Sign in to access movie and session management.
+                  Connectez-vous pour accéder à la gestion des films et des séances.
                 </Text>
               </div>
 
               {error && (
-                <Alert color="red" variant="light" title="Authentication failed">
+                <Alert color="red" variant="light" title="Échec de l'authentification">
                   {error}
                 </Alert>
               )}
 
               <TextInput
-                label="Username"
+                label="Nom d'utilisateur"
                 value={username}
                 onChange={(event) => setUsername(event.currentTarget.value)}
                 autoComplete="username"
@@ -111,7 +111,7 @@ const AdminLogin = (): JSX.Element => {
               />
 
               <PasswordInput
-                label="Password"
+                label="Mot de passe"
                 value={password}
                 onChange={(event) => setPassword(event.currentTarget.value)}
                 autoComplete="current-password"
@@ -119,7 +119,7 @@ const AdminLogin = (): JSX.Element => {
               />
 
               <Button type="submit" loading={submitting} color="dark">
-                Login
+                Se connecter
               </Button>
             </Stack>
           </form>

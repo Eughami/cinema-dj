@@ -71,7 +71,7 @@ const MovieDetails = (): JSX.Element => {
       const response = await axios.get(toApiUrl(`/movies/${id}`));
       setMovie(response.data);
     } catch (error) {
-      console.error('Failed to fetch movie details:', error);
+      console.error('Échec de la récupération des détails du film :', error);
     }
   };
 
@@ -80,12 +80,12 @@ const MovieDetails = (): JSX.Element => {
       const response = await axios.get(toApiUrl(`/movies/${id}/sessions`));
       setSessions(response.data);
     } catch (error) {
-      console.error('Failed to fetch sessions:', error);
+      console.error('Échec de la récupération des séances :', error);
     }
   };
 
   const handleDeleteSession = async (sessionId: number) => {
-    if (window.confirm('Are you sure you want to delete this session?')) {
+    if (window.confirm('Êtes-vous sûr de vouloir supprimer cette séance ?')) {
       setLoadingActions((prev) => ({ ...prev, delete: true }));
       try {
         await axios.delete(
@@ -94,7 +94,7 @@ const MovieDetails = (): JSX.Element => {
         );
         fetchSessions();
       } catch (error) {
-        console.error('Failed to delete session:', error);
+        console.error('Échec de la suppression de la séance :', error);
       } finally {
         setLoadingActions((prev) => ({ ...prev, delete: false }));
       }
@@ -117,7 +117,7 @@ const MovieDetails = (): JSX.Element => {
       <div className={styles.adminPage}>
         <div className={styles.adminContainer}>
           <Paper className={styles.surfacePanel} p="lg">
-            <Text>Loading...</Text>
+            <Text>Chargement...</Text>
           </Paper>
         </div>
       </div>
@@ -130,10 +130,10 @@ const MovieDetails = (): JSX.Element => {
         <Paper className={styles.heroPanel}>
           <Group justify="space-between" align="flex-start" gap="sm">
             <div>
-              <Text className={styles.kicker}>Movie Sessions</Text>
+              <Text className={styles.kicker}>Séances du film</Text>
               <Title order={2}>{movie.title}</Title>
               <Text mt="xs" className={styles.heroHint}>
-                Add or edit sessions and inspect reservation details per session.
+                Ajoutez ou modifiez des séances et consultez les détails des réservations par séance.
               </Text>
             </div>
             <Group gap="xs">
@@ -145,7 +145,7 @@ const MovieDetails = (): JSX.Element => {
                 leftSection={<FiArrowLeft size={14} />}
                 onClick={() => navigate('/admin')}
               >
-                Back to Movies
+                Retour aux films
               </Button>
               <div style={{ position: 'relative' }}>
               <LoadingOverlay
@@ -163,7 +163,7 @@ const MovieDetails = (): JSX.Element => {
                   setOpened(true);
                 }}
               >
-                Add Session
+                Ajouter une séance
               </Button>
             </div>
             </Group>
@@ -172,19 +172,19 @@ const MovieDetails = (): JSX.Element => {
           <SimpleGrid cols={{ base: 1, sm: 3 }} className={styles.statsGrid}>
             <Paper className={styles.statCard}>
               <Text size="xs" fw={600} c="gray.2">
-                Sessions planned
+                Séances planifiées
               </Text>
               <Title order={3}>{sessions.length}</Title>
             </Paper>
             <Paper className={styles.statCard}>
               <Text size="xs" fw={600} c="gray.2">
-                Halls used
+                Salles utilisées
               </Text>
               <Title order={3}>{totalHallsUsed}</Title>
             </Paper>
             <Paper className={styles.statCard}>
               <Text size="xs" fw={600} c="gray.2">
-                Duration
+                Durée
               </Text>
               <Title order={3}>{movie.duration} min</Title>
             </Paper>
@@ -205,7 +205,7 @@ const MovieDetails = (): JSX.Element => {
                   {movie.description}
                 </Text>
                 <div className={styles.pillList}>
-                  <span className={styles.miniPill}>{movie.genre || 'Genre N/A'}</span>
+                  <span className={styles.miniPill}>{movie.genre || 'Genre N/D'}</span>
                   {movie.actors && <span className={styles.miniPill}>{movie.actors}</span>}
                 </div>
               </div>
@@ -216,9 +216,9 @@ const MovieDetails = (): JSX.Element => {
         <Paper className={styles.surfacePanel}>
           <div className={styles.panelHeader}>
             <Group justify="space-between">
-              <Text fw={700}>Sessions</Text>
+              <Text fw={700}>Séances</Text>
               <Badge radius="sm" color="cyan" variant="light">
-                {sessions.length} total
+                {sessions.length} au total
               </Badge>
             </Group>
           </div>
@@ -228,10 +228,10 @@ const MovieDetails = (): JSX.Element => {
                 <Table.Thead>
                   <Table.Tr>
                     <Table.Th>Date</Table.Th>
-                    <Table.Th>Time</Table.Th>
+                    <Table.Th>Heure</Table.Th>
                     <Table.Th>Audio</Table.Th>
-                    <Table.Th>Subtitle</Table.Th>
-                    <Table.Th>Hall</Table.Th>
+                    <Table.Th>Sous-titres</Table.Th>
+                    <Table.Th>Salle</Table.Th>
                     <Table.Th>Actions</Table.Th>
                   </Table.Tr>
                 </Table.Thead>
@@ -240,7 +240,7 @@ const MovieDetails = (): JSX.Element => {
                     <Table.Tr>
                       <Table.Td colSpan={6}>
                         <Text c="dimmed" ta="center" py="md">
-                          No sessions yet for this movie.
+                          Aucune séance pour ce film pour le moment.
                         </Text>
                       </Table.Td>
                     </Table.Tr>
@@ -256,7 +256,7 @@ const MovieDetails = (): JSX.Element => {
                           {session.audio}
                         </Badge>
                       </Table.Td>
-                      <Table.Td>{session.subtitle || 'N/A'}</Table.Td>
+                      <Table.Td>{session.subtitle || 'N/D'}</Table.Td>
                       <Table.Td>{session.hall_no}</Table.Td>
                       <Table.Td>
                         <div className={styles.actionGroup}>
@@ -264,7 +264,7 @@ const MovieDetails = (): JSX.Element => {
                             variant="light"
                             color="teal"
                             onClick={() => navigate(`/admin/session/${session.id}`)}
-                            aria-label="View session details"
+                            aria-label="Voir les détails de la séance"
                           >
                             <FaEye size={14} />
                           </ActionIcon>
@@ -278,7 +278,7 @@ const MovieDetails = (): JSX.Element => {
                               variant="light"
                               color="indigo"
                               onClick={() => handleEditSession(session)}
-                              aria-label="Edit session"
+                              aria-label="Modifier la séance"
                             >
                               <CiEdit size={17} />
                             </ActionIcon>
@@ -293,7 +293,7 @@ const MovieDetails = (): JSX.Element => {
                               variant="light"
                               color="red"
                               onClick={() => handleDeleteSession(session.id)}
-                              aria-label="Delete session"
+                              aria-label="Supprimer la séance"
                             >
                               <FaRegTrashAlt size={13} />
                             </ActionIcon>
@@ -316,7 +316,7 @@ const MovieDetails = (): JSX.Element => {
           setSelectedSession(null);
           setLoadingActions((prev) => ({ ...prev, edit: false, add: false }));
         }}
-        title={selectedSession ? 'Edit Session' : 'Add Session'}
+        title={selectedSession ? 'Modifier la séance' : 'Ajouter une séance'}
         padding="xl"
         size="xl"
       >

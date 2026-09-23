@@ -62,7 +62,7 @@ const AddSession = (props: Iprops): JSX.Element => {
   const [date, setDate] = useState<Date | null>(null);
   const [selectedDates, setSelectedDates] = useState<string[]>([]);
   const [time, setTime] = useState<string>('');
-  const [audio, setAudio] = useState('English');
+  const [audio, setAudio] = useState('Français');
   const [subtitle, setSubtitle] = useState('');
   const [hallNo, setHallNo] = useState(1);
 
@@ -86,12 +86,12 @@ const AddSession = (props: Iprops): JSX.Element => {
 
   const handleSubmit = async () => {
     if (!mId || !time) {
-      alert('Please fill all fields');
+      alert('Veuillez remplir tous les champs');
       return;
     }
 
     if (!session && selectedDates.length === 0) {
-      alert('Select at least one day to create sessions');
+      alert('Sélectionnez au moins un jour pour créer des séances');
       return;
     }
 
@@ -107,7 +107,7 @@ const AddSession = (props: Iprops): JSX.Element => {
     try {
       if (session) {
         if (!date) {
-          alert('Please select a date');
+          alert('Veuillez sélectionner une date');
           return;
         }
 
@@ -140,14 +140,14 @@ const AddSession = (props: Iprops): JSX.Element => {
 
         if (createdCount === 0) {
           alert(
-            'No sessions were created. Check hall/date/time conflicts and try again.'
+            'Aucune séance créée. Vérifiez les conflits salle/date/heure et réessayez.'
           );
           return;
         }
 
         if (failedCount > 0) {
           alert(
-            `${createdCount} session(s) created, ${failedCount} failed (likely duplicate hall/date/time).`
+            `${createdCount} séance(s) créée(s), ${failedCount} échouée(s) (probablement salle/date/heure en double).`
           );
         }
 
@@ -155,7 +155,7 @@ const AddSession = (props: Iprops): JSX.Element => {
         return;
       }
     } catch (error) {
-      alert('Failed to add/update session');
+      alert("Échec de l'ajout / mise à jour de la séance");
       console.error(error);
     }
   };
@@ -164,8 +164,8 @@ const AddSession = (props: Iprops): JSX.Element => {
     <Grid>
       <Grid.Col span={6}>
         <Select
-          label="Select Movie"
-          placeholder="Pick a movie"
+          label="Choisir le film"
+          placeholder="Choisir un film"
           data={[
             {
               value: mId.toString(),
@@ -179,7 +179,7 @@ const AddSession = (props: Iprops): JSX.Element => {
       </Grid.Col>
       <Grid.Col span={session ? 6 : 12}>
         <TextInput
-          label="Select Time"
+          label="Choisir l'heure"
           value={time}
           onChange={(e) => setTime(e.target.value)}
           type="time"
@@ -190,7 +190,7 @@ const AddSession = (props: Iprops): JSX.Element => {
       {session && (
         <Grid.Col span={6}>
           <DateInput
-            label="Select Date"
+            label="Choisir la date"
             value={date}
             onChange={setDate}
             required
@@ -200,8 +200,8 @@ const AddSession = (props: Iprops): JSX.Element => {
       <Grid.Col span={6}>
         <Select
           label="Audio"
-          placeholder="Select a language"
-          data={['English', 'French']}
+          placeholder="Choisir une langue"
+          data={['Français', 'Anglais']}
           value={audio}
           onChange={(e) => setAudio(e || '')}
           required
@@ -209,15 +209,15 @@ const AddSession = (props: Iprops): JSX.Element => {
       </Grid.Col>
       <Grid.Col span={6}>
         <TextInput
-          label="Subtitle"
+          label="Sous-titres"
           value={subtitle}
           onChange={(e) => setSubtitle(e.target.value)}
         />
       </Grid.Col>
       <Grid.Col span={6}>
         <Select
-          label="Select Hall Number"
-          placeholder="Select a hall number ..."
+          label="Choisir le numéro de salle"
+          placeholder="Choisir un numéro de salle ..."
           data={['1', '2']}
           value={hallNo.toString()}
           onChange={(e) => setHallNo(parseInt(e || '', 10))}
@@ -228,19 +228,20 @@ const AddSession = (props: Iprops): JSX.Element => {
         <Grid.Col span={12}>
           <Stack gap="xs">
             <Group justify="space-between">
-              <Title order={5}>Select session days</Title>
+              <Title order={5}>Choisir les jours de séance</Title>
               <Badge variant="light" color="cyan" leftSection={<FiCalendar />}>
-                {selectedDates.length} selected
+                {selectedDates.length} sélectionné(s)
               </Badge>
             </Group>
             <Alert
               variant="light"
               color="cyan"
               icon={<FiInfo />}
-              title="Bulk creation enabled"
+              title="Création en masse activée"
             >
-              By default, tomorrow + next 6 days are selected. Toggle days to
-              create the same session time on all selected dates.
+              Par défaut, demain + les 6 prochains jours sont sélectionnés. Activez
+              ou désactivez des jours pour créer la même séance à la même heure
+              sur toutes les dates sélectionnées.
             </Alert>
             <Chip.Group
               multiple
@@ -252,7 +253,7 @@ const AddSession = (props: Iprops): JSX.Element => {
                   const parsedDate = fromIsoDate(dateOption);
                   return (
                     <Chip key={dateOption} value={dateOption} radius="md">
-                      {parsedDate.toLocaleDateString('en-US', {
+                      {parsedDate.toLocaleDateString('fr-FR', {
                         weekday: 'short',
                         day: 'numeric',
                         month: 'short',
@@ -263,14 +264,14 @@ const AddSession = (props: Iprops): JSX.Element => {
               </Group>
             </Chip.Group>
             <Text size="sm" c="dimmed">
-              Conflicts for existing hall/date/time combinations are skipped.
+              Les conflits pour les combinaisons salle/date/heure existantes sont ignorés.
             </Text>
           </Stack>
         </Grid.Col>
       )}
       <Grid.Col span={12}>
         <Button onClick={handleSubmit}>
-          {session ? 'Update Session' : 'Create Sessions'}
+          {session ? 'Mettre à jour la séance' : 'Créer les séances'}
         </Button>
       </Grid.Col>
     </Grid>

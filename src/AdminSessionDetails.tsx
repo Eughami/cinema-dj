@@ -66,7 +66,7 @@ const AdminSessionDetails = (): JSX.Element => {
   useEffect(() => {
     const fetchSessionDetails = async () => {
       if (!Number.isInteger(sessionId) || sessionId <= 0) {
-        setError('Invalid session id');
+        setError('Identifiant de séance invalide');
         setLoading(false);
         return;
       }
@@ -78,8 +78,8 @@ const AdminSessionDetails = (): JSX.Element => {
         );
         setData(response.data);
       } catch (fetchError) {
-        console.error('Failed to fetch session details:', fetchError);
-        setError('Unable to load session details');
+        console.error('Échec de la récupération des détails de la séance :', fetchError);
+        setError('Impossible de charger les détails de la séance');
       } finally {
         setLoading(false);
       }
@@ -126,7 +126,7 @@ const AdminSessionDetails = (): JSX.Element => {
       <div className={styles.adminPage}>
         <div className={styles.adminContainer}>
           <Paper className={styles.surfacePanel} p="lg">
-            <Text>Loading session details...</Text>
+            <Text>Chargement des détails de la séance...</Text>
           </Paper>
         </div>
       </div>
@@ -139,16 +139,16 @@ const AdminSessionDetails = (): JSX.Element => {
         <div className={styles.adminContainer}>
           <Paper className={styles.surfacePanel} p="lg">
             <Group justify="space-between" mb="sm">
-              <Title order={4}>Session details</Title>
+              <Title order={4}>Détails de la séance</Title>
               <Button
                 variant="light"
                 leftSection={<FiArrowLeft size={14} />}
                 onClick={() => navigate('/admin')}
               >
-                Back to Admin
+                Retour à l'admin
               </Button>
             </Group>
-            <Text c="red.7">{error || 'Session details not found'}</Text>
+            <Text c="red.7">{error || 'Détails de la séance introuvables'}</Text>
           </Paper>
         </div>
       </div>
@@ -161,13 +161,13 @@ const AdminSessionDetails = (): JSX.Element => {
         <Paper className={styles.heroPanel}>
           <Group justify="space-between" align="flex-start" gap="sm">
             <div>
-              <Text className={styles.kicker}>Session Reservations</Text>
+              <Text className={styles.kicker}>Réservations de la séance</Text>
               <Title order={2}>{data.movie.title}</Title>
               <Text mt="xs" className={styles.heroHint}>
-                {dateFormatter.format(new Date(data.session.date))} at{' '}
-                {data.session.time} | Hall {data.session.hall_no} | Audio:{' '}
+                {dateFormatter.format(new Date(data.session.date))} à{' '}
+                {data.session.time} | Salle {data.session.hall_no} | Audio :{' '}
                 {data.session.audio}
-                {data.session.subtitle ? ` | Subtitle: ${data.session.subtitle}` : ''}
+                {data.session.subtitle ? ` | Sous-titres : ${data.session.subtitle}` : ''}
               </Text>
             </div>
             <Group gap="xs">
@@ -179,7 +179,7 @@ const AdminSessionDetails = (): JSX.Element => {
                 leftSection={<FiArrowLeft size={14} />}
                 onClick={() => navigate(`/admin/movie/${data.movie.id}`)}
               >
-                Back to Sessions
+                Retour aux séances
               </Button>
             </Group>
           </Group>
@@ -187,19 +187,19 @@ const AdminSessionDetails = (): JSX.Element => {
           <SimpleGrid cols={{ base: 1, sm: 3 }} className={styles.statsGrid}>
             <Paper className={styles.statCard}>
               <Text size="xs" fw={600} c="gray.2">
-                Session ID
+                ID de la séance
               </Text>
               <Title order={3}>#{data.session.id}</Title>
             </Paper>
             <Paper className={styles.statCard}>
               <Text size="xs" fw={600} c="gray.2">
-                Reservations
+                Réservations
               </Text>
               <Title order={3}>{data.total_reservations}</Title>
             </Paper>
             <Paper className={styles.statCard}>
               <Text size="xs" fw={600} c="gray.2">
-                Seats booked
+                Places réservées
               </Text>
               <Title order={3}>{data.total_people}</Title>
             </Paper>
@@ -210,7 +210,7 @@ const AdminSessionDetails = (): JSX.Element => {
           <div className={styles.panelHeader}>
             <Group gap="xs">
               <FiUsers size={18} />
-              <Text fw={700}>Reservation details</Text>
+              <Text fw={700}>Détails des réservations</Text>
             </Group>
           </div>
 
@@ -220,7 +220,7 @@ const AdminSessionDetails = (): JSX.Element => {
                 {data.reservations.length === 0 && (
                   <Paper p="md" withBorder>
                     <Text c="dimmed" size="sm">
-                      No reservations yet for this session.
+                      Aucune réservation pour cette séance pour le moment.
                     </Text>
                   </Paper>
                 )}
@@ -246,7 +246,7 @@ const AdminSessionDetails = (): JSX.Element => {
                     <Group justify="space-between" mb={6}>
                       <Text fw={700}>{reservation.name}</Text>
                       <Badge variant="light" color="teal" radius="sm">
-                        {reservation.people_count} seats
+                        {reservation.people_count} places
                       </Badge>
                     </Group>
                     <Text size="sm" c="dimmed">
@@ -256,7 +256,7 @@ const AdminSessionDetails = (): JSX.Element => {
                       {reservation.email}
                     </Text>
                     <Text mt={6} size="xs">
-                      Reservation #{reservation.id}
+                      Réservation #{reservation.id}
                     </Text>
                   </div>
                 ))}
@@ -266,7 +266,7 @@ const AdminSessionDetails = (): JSX.Element => {
                 {!selectedReservation && (
                   <Paper p="md" withBorder>
                     <Text c="dimmed" size="sm">
-                      Select a reservation to view seats.
+                      Sélectionnez une réservation pour voir les places.
                     </Text>
                   </Paper>
                 )}
@@ -282,16 +282,16 @@ const AdminSessionDetails = (): JSX.Element => {
                           </Text>
                         </div>
                         <Badge variant="filled" color="orange" radius="sm">
-                          {selectedReservation.people_count} people
+                          {selectedReservation.people_count} personnes
                         </Badge>
                       </Group>
                       <Text size="sm" mt="xs">
-                        Seats: {selectedReservation.seats.join(', ')}
+                        Places : {selectedReservation.seats.join(', ')}
                       </Text>
                     </Paper>
 
                     <div className={styles.seatShell}>
-                      <div className={styles.screen}>SCREEN</div>
+                      <div className={styles.screen}>ÉCRAN</div>
                       {theaterRows.map((rowId) => (
                         <div key={rowId} className={styles.seatRow}>
                           <div className={styles.seatRowLabel}>{rowId}</div>
@@ -330,19 +330,19 @@ const AdminSessionDetails = (): JSX.Element => {
                           >
                             1
                           </span>
-                          Selected reservation
+                          Réservation sélectionnée
                         </span>
                         <span className={styles.legendItem}>
                           <span className={`${styles.seat} ${styles.seatReserved}`}>
                             1
                           </span>
-                          Other reserved seats
+                          Autres places réservées
                         </span>
                         <span className={styles.legendItem}>
                           <span className={`${styles.seat} ${styles.seatAvailable}`}>
                             1
                           </span>
-                          Available
+                          Disponible
                         </span>
                       </div>
                     </div>

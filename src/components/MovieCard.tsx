@@ -15,7 +15,7 @@ const MovieCard = (props: MovieCardProps) => {
           h={250}
           w={190}
           src={toAssetUrl(movie.image)}
-          alt="movie poster"
+          alt="affiche du film"
         />
       </a>
       <h3>

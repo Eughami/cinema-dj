@@ -90,8 +90,8 @@ export const TheaterSeating: React.FC = () => {
 
     if (currentSeat.status === 'available' && selectedSeatsCount >= 5) {
       warning(
-        'You can only select up to 5 seats at once.',
-        'Seat limit reached',
+        'Vous ne pouvez sélectionner que 5 places maximum à la fois.',
+        'Limite de places atteinte',
       );
       return;
     }
@@ -199,7 +199,7 @@ export const TheaterSeating: React.FC = () => {
       setOpened(true);
     },
     onError: (error) => {
-      console.error('Booking failed:', error);
+      console.error('Échec de la réservation :', error);
       if (axios.isAxiosError(error)) {
         const response = error.response;
         if (response?.status === 409) {
@@ -241,7 +241,7 @@ export const TheaterSeating: React.FC = () => {
 
   const sessionDateLabel = bookingSummary?.sessionDate
     ? formatDate(bookingSummary.sessionDate, true)
-    : ' N/A ';
+    : ' N/D ';
   const bookingCodeLabel = formatBookingCode(
     bookingSummary?.booking_id,
     bookingSummary?.session_id
@@ -250,9 +250,9 @@ export const TheaterSeating: React.FC = () => {
   if (isNaN(numericId) || numericId <= 0) {
     return (
       <div>
-        <h1>404 - Page Not Found</h1>
-        <p>The movie ID is invalid or not provided.</p>
-        <button onClick={() => navigate('/')}>Back to Home</button>
+        <h1>404 - Page non trouvée</h1>
+        <p>L'identifiant du film est invalide ou non fourni.</p>
+        <button onClick={() => navigate('/')}>Retour à l'accueil</button>
       </div>
     );
   }
@@ -261,7 +261,7 @@ export const TheaterSeating: React.FC = () => {
     return (
       <Box p="xl" ta="center">
         <LoadingOverlay visible zIndex={1000} overlayProps={{ radius: 'lg', blur: 2 }}>
-          Loading seat selection...
+          Chargement de la sélection des places...
         </LoadingOverlay>
       </Box>
     );
@@ -270,10 +270,10 @@ export const TheaterSeating: React.FC = () => {
     return (
       <Box p="xl" ta="center">
         <Text c="red" size="lg" fw={500}>
-          Error: {error?.message}
+          Erreur : {error?.message}
         </Text>
         <Button mt="md" onClick={() => window.location.reload()}>
-          Reload Page
+          Recharger la page
         </Button>
       </Box>
     );
@@ -292,9 +292,9 @@ export const TheaterSeating: React.FC = () => {
           <h1 className={styles.title}>{seatData?.movieDetails.title}</h1>
           <div className={styles.details}>
             <span>
-              Audio: {seatData?.sessionDetails.audio}
+              Audio : {seatData?.sessionDetails.audio}
               {seatData?.sessionDetails.subtitle &&
-                ` | Subtitles: ${seatData?.sessionDetails.subtitle}`}
+                ` | Sous-titres : ${seatData?.sessionDetails.subtitle}`}
             </span>
             <div className={styles.showtime}>
               <span className={styles.date}>
@@ -302,14 +302,14 @@ export const TheaterSeating: React.FC = () => {
                 {seatData?.sessionDetails.time}
               </span>
               <span className={styles.hall}>
-                Salon {seatData?.sessionDetails.hall_no}
+                Salle {seatData?.sessionDetails.hall_no}
               </span>
             </div>
           </div>
         </div>
 
         <div className={styles.screen}>
-          <div className={styles.screenText}>SCREEN IS HERE</div>
+          <div className={styles.screenText}>L'ÉCRAN EST ICI</div>
         </div>
         <Legend />
 
@@ -350,7 +350,7 @@ export const TheaterSeating: React.FC = () => {
         onClose={() => {
           window.location.reload();
         }}
-        title="Your Booking Confirmation"
+        title="Confirmation de votre réservation"
         centered
         closeOnClickOutside={false}
         size="lg"
@@ -359,12 +359,12 @@ export const TheaterSeating: React.FC = () => {
           <Alert
             color="green"
             radius="md"
-            title="Booking Successful!"
+            title="Réservation réussie !"
             variant="light"
             w="100%"
           >
-            Your cinema seat has been reserved. Present this booking card at
-            the counter.
+            Votre place de cinéma a été réservée. Présentez cette carte de
+            réservation au guichet.
           </Alert>
           <Paper
             w="100%"
@@ -375,41 +375,41 @@ export const TheaterSeating: React.FC = () => {
             style={{ background: '#fbfcff' }}
           >
             <Group justify="space-between" mb="xs">
-              <Text fw={700}>Booking Summary</Text>
+              <Text fw={700}>Résumé de la réservation</Text>
               <Badge color="grape" variant="filled" size="lg">
                 {bookingCodeLabel}
               </Badge>
             </Group>
             <Text size="xs" c="dimmed" mb="sm">
-              Keep this booking code for check-in.
+              Conservez ce code de réservation pour l'enregistrement.
             </Text>
             <Divider mb="sm" />
             <Stack gap={6}>
               <Text size="sm">
-                <strong>Name:</strong> {bookingSummary?.name || 'N/A'}
+                <strong>Nom :</strong> {bookingSummary?.name || 'N/D'}
               </Text>
               <Text size="sm">
-                <strong>Email:</strong> {bookingSummary?.email || 'N/A'}
+                <strong>E-mail :</strong> {bookingSummary?.email || 'N/D'}
               </Text>
               <Text size="sm">
-                <strong>Phone:</strong> {bookingSummary?.phone_number || 'N/A'}
+                <strong>Téléphone :</strong> {bookingSummary?.phone_number || 'N/D'}
               </Text>
               <Text size="sm">
-                <strong>Movie:</strong> {bookingSummary?.movieTitle || 'N/A'}
+                <strong>Film :</strong> {bookingSummary?.movieTitle || 'N/D'}
               </Text>
               <Text size="sm">
-                <strong>Session:</strong> Salon {bookingSummary?.hallNo} |{' '}
+                <strong>Séance :</strong> Salle {bookingSummary?.hallNo} |{' '}
                 {sessionDateLabel}
                 {bookingSummary?.sessionTime || ''}
               </Text>
               <Text size="sm">
-                <strong>Audio/Subtitles:</strong> {bookingSummary?.audio || 'N/A'}
+                <strong>Audio/Sous-titres :</strong> {bookingSummary?.audio || 'N/D'}
                 {bookingSummary?.subtitle
                   ? ` / ${bookingSummary.subtitle}`
-                  : ' / None'}
+                  : ' / Aucun'}
               </Text>
               <Text size="sm">
-                <strong>Seats:</strong> {bookingSummary?.seats.join(', ') || 'N/A'}
+                <strong>Places :</strong> {bookingSummary?.seats.join(', ') || 'N/D'}
               </Text>
             </Stack>
           </Paper>
@@ -421,13 +421,13 @@ export const TheaterSeating: React.FC = () => {
             style={{ border: '1px solid #ffeeba' }}
           >
             <Text size="sm" ta="center" c="black">
-              This reservation expires if you do not arrive at least 1 hour
-              before the session. Please screenshot this card or save it as an
-              image.
+              Cette réservation expire si vous n'arrivez pas au moins 1 heure
+              avant la séance. Veuillez faire une capture d'écran de cette carte
+              ou l'enregistrer en image.
             </Text>
           </Paper>
           <Button onClick={() => void handleDownload()} variant="outline">
-            Download Booking Image
+            Télécharger l'image de réservation
           </Button>
         </Stack>
       </Modal>
@@ -458,7 +458,7 @@ export const TheaterSeating: React.FC = () => {
             }}
           >
             <div style={{ fontSize: '24px', fontWeight: 700 }}>
-              Cinema DJ Booking
+              Réservation Cinéma DJ
             </div>
             <div
               style={{
@@ -473,27 +473,27 @@ export const TheaterSeating: React.FC = () => {
             </div>
           </div>
           <div style={{ fontSize: '16px', marginBottom: '10px' }}>
-            Name: {bookingSummary.name || 'N/A'}
+            Nom : {bookingSummary.name || 'N/D'}
           </div>
           <div style={{ fontSize: '16px', marginBottom: '10px' }}>
-            Email: {bookingSummary.email || 'N/A'}
+            E-mail : {bookingSummary.email || 'N/D'}
           </div>
           <div style={{ fontSize: '16px', marginBottom: '10px' }}>
-            Phone: {bookingSummary.phone_number || 'N/A'}
+            Téléphone : {bookingSummary.phone_number || 'N/D'}
           </div>
           <div style={{ fontSize: '16px', marginBottom: '10px' }}>
-            Movie: {bookingSummary.movieTitle || 'N/A'}
+            Film : {bookingSummary.movieTitle || 'N/D'}
           </div>
           <div style={{ fontSize: '16px', marginBottom: '10px' }}>
-            Session: Salon {bookingSummary.hallNo} | {sessionDateLabel}
+            Séance : Salle {bookingSummary.hallNo} | {sessionDateLabel}
             {bookingSummary.sessionTime || ''}
           </div>
           <div style={{ fontSize: '16px', marginBottom: '10px' }}>
-            Audio/Subtitles: {bookingSummary.audio || 'N/A'}
-            {bookingSummary.subtitle ? ` / ${bookingSummary.subtitle}` : ' / None'}
+            Audio/Sous-titres : {bookingSummary.audio || 'N/D'}
+            {bookingSummary.subtitle ? ` / ${bookingSummary.subtitle}` : ' / Aucun'}
           </div>
           <div style={{ fontSize: '16px', marginBottom: '18px' }}>
-            Seats: {bookingSummary.seats.join(', ') || 'N/A'}
+            Places : {bookingSummary.seats.join(', ') || 'N/D'}
           </div>
           <div
             style={{
@@ -503,8 +503,8 @@ export const TheaterSeating: React.FC = () => {
               fontWeight: 700,
             }}
           >
-            This reservation expires if you do not arrive at least 1 hour
-            before the session.
+            Cette réservation expire si vous n'arrivez pas au moins 1 heure
+            avant la séance.
           </div>
         </div>
       )}

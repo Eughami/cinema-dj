@@ -6,11 +6,11 @@ import { FaFacebookMessenger } from 'react-icons/fa';
 export const OtherOptions: React.FC = () => {
   return (
     <div className={styles.container}>
-      <h2 className={styles.title}>OTHER OPTIONS</h2>
+      <h2 className={styles.title}>AUTRES OPTIONS</h2>
       <div className={styles.options}>
         <div className={styles.option}>
-          <h3>Book via Facebook</h3>
-          <p>Click the button to open chat with operator.</p>
+          <h3>Réserver via Facebook</h3>
+          <p>Cliquez sur le bouton pour ouvrir le chat avec un opérateur.</p>
           {/* <button className={styles.chatButton}>Open chat</button> */}
           <Button
             className={styles.chatButton}
@@ -22,12 +22,12 @@ export const OtherOptions: React.FC = () => {
             color="blue"
             leftSection={<FaFacebookMessenger size={18} />}
           >
-            Open chat
+            Ouvrir le chat
           </Button>
         </div>
         <div className={styles.option}>
-          <h3>Book via phone</h3>
-          <p>Call directly to our operator for reservation.</p>
+          <h3>Réserver par téléphone</h3>
+          <p>Appelez directement notre opérateur pour réserver.</p>
           <a href="tel:+903924443777" className={styles.phone}>
             +253 21 25 21 21
           </a>

@@ -80,7 +80,7 @@ const HomePage = () => {
     );
   }
   if (isMoviesError || isSessionsError) {
-    return <div>Error: {moviesError?.message || sessionsError?.message}</div>;
+    return <div>Erreur : {moviesError?.message || sessionsError?.message}</div>;
   }
 
   const carouselMovies = [...currentMovies, ...futureMovies];
@@ -88,8 +88,8 @@ const HomePage = () => {
   return (
     <div className="appRoot">
       <HomeCaroussel movies={carouselMovies} />
-      <MovieList title="Now on cinema" movies={currentMovies} />
-      <MovieList title="Future Premiers" movies={futureMovies} />
+      <MovieList title="Actuellement au cinéma" movies={currentMovies} />
+      <MovieList title="Prochaines sorties" movies={futureMovies} />
     </div>
   );
 };

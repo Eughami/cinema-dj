@@ -52,17 +52,17 @@ const ReservationForm = (props: IReservationFormProps) => {
       !formData.email ||
       !/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(formData.email)
     ) {
-      newErrors.email = 'Please enter a valid email';
+      newErrors.email = 'Veuillez saisir un e-mail valide';
       isValid = false;
     }
 
     if (formData.phone.length !== 6) {
-      newErrors.phone = 'Phone number must be 6 digits after "77"';
+      newErrors.phone = 'Le numéro doit comporter 6 chiffres après « 77 »';
       isValid = false;
     }
 
     if (!formData.name.trim()) {
-      newErrors.name = 'Name is required';
+      newErrors.name = 'Le nom est requis';
       isValid = false;
     }
 
@@ -113,7 +113,7 @@ const ReservationForm = (props: IReservationFormProps) => {
 
           <input
             type="text"
-            placeholder="Name"
+            placeholder="Nom"
             required
             value={formData.name}
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
@@ -130,16 +130,16 @@ const ReservationForm = (props: IReservationFormProps) => {
           <div className={styles.price}>
             <img
               src="/ticket-icon.svg"
-              alt="Ticket"
+              alt="Billet"
               className={styles.ticketIcon}
             />
             <span className={styles.amount}>{price} DJF</span>
           </div>
-          <button className={styles.reserveButton}>TICKET RESERVATION</button>
+          <button className={styles.reserveButton}>RÉSERVATION DE BILLET</button>
           <div className={styles.notice}>
-            Please note, that you must come to cinema <strong>1 hour</strong>{' '}
-            before the session start to purchase your ticket or your reservation
-            will be <strong>cancelled</strong>.
+            Veuillez noter que vous devez venir au cinéma <strong>1 heure</strong>{' '}
+            avant le début de la séance pour acheter votre billet, sinon votre
+            réservation sera <strong>annulée</strong>.
           </div>
         </Grid.Col>
       </Grid>

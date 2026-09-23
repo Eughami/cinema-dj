@@ -28,7 +28,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
-    console.error('ErrorBoundary caught:', error, errorInfo);
+    console.error('ErrorBoundary a capturé :', error, errorInfo);
   }
 
   handleReset = (): void => {
@@ -44,16 +44,16 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
             icon={<FiAlertTriangle />}
             color="red"
             radius="md"
-            title="Something went wrong"
+            title="Une erreur est survenue"
             variant="light"
           >
             <Stack gap="sm">
               <Text size="sm">
-                {this.state.error?.message || 'An unexpected error occurred.'}
+                {this.state.error?.message || "Une erreur inattendue s'est produite."}
               </Text>
               <Group justify="center">
                 <Button onClick={this.handleReset} variant="outline">
-                  Reload page
+                  Recharger la page
                 </Button>
               </Group>
             </Stack>
